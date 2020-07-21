@@ -36,10 +36,11 @@ class EditableBufferedReader: BufferedReader {
         line.print() // Clean the command line.
         var readChar: Int = this.read()
         while (readChar != 13) { // Enter
-            when(readChar) {
-                8 -> line.deleteChar() // Backspace
-                127 -> line.deleteChar() // Delete
-                else -> line.appendChar(readChar.toChar())
+            if (readChar == 8 || readChar == 127) { // Delete
+                line.deleteChar()
+            }
+            else {
+                line.appendChar(readChar.toChar())
             }
             line.print()
             readChar = this.read()
