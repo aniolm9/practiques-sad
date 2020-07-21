@@ -6,14 +6,12 @@ internal object TestReadLine {
     @JvmStatic
     fun main(args: Array<String>) {
         val input: BufferedReader = EditableBufferedReader(InputStreamReader(System.`in`))
-        //val str: String = ""
-        var n = 0
+        var str = ""
         try {
-            //str = in.readLine();
-            n = input.read()
+            str = input.readLine();
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        println("\nline is: $n")
+        println("\nline is: $str")
     }
 }
