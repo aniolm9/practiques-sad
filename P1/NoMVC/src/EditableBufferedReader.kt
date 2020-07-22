@@ -24,12 +24,24 @@ class EditableBufferedReader: BufferedReader {
     private fun detectCSI() {
         if (this.read().toChar() == '[') { // Detect arrows
             when (this.read().toChar()) {
-                'D' -> {if (line.position > 0) {line.position -= 1}} // Left arrow
-                'C' -> {if (line.position < line.text.length) {line.position += 1}} // Right arrow
-                '5' -> {line.position = 0; this.read()} // Start
-                '6' -> {line.position = line.text.length; this.read()} // End
-                '2' -> {line.insert = !line.insert; this.read()} // Insert
-                '3' -> {line.deleteChar(0); this.read()} // Supr
+                'D' -> if (line.position > 0) line.position -= 1 // Left arrow
+                'C' -> if (line.position < line.text.length) line.position += 1 // Right arrow
+                '5' -> { // Start
+                    line.position = 0
+                    this.read()
+                }
+                '6' -> { // End
+                    line.position = line.text.length
+                    this.read()
+                }
+                '2' -> { // Insert
+                    line.insert = !line.insert
+                    this.read()
+                }
+                '3' -> { // Supr
+                    line.deleteChar(0)
+                    this.read()
+                }
             }
         }
     }
