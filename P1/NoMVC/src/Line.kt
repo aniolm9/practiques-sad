@@ -7,7 +7,12 @@ class Line {
 
     fun appendChar(c: Char) {
         val strBuilder = StringBuilder(text)
-        strBuilder.insert(this.position, c)
+        if (insert && position < text.length) {
+            strBuilder.setCharAt(position, c)
+        }
+        else {
+            strBuilder.insert(this.position, c)
+        }
         this.text = strBuilder.toString()
         this.position = this.position+1
     }
