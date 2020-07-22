@@ -1,5 +1,6 @@
 import java.io.BufferedReader
 import java.io.Reader
+import java.lang.Thread.sleep
 
 class EditableBufferedReader: BufferedReader {
     private var line: Line = Line()
@@ -20,6 +21,20 @@ class EditableBufferedReader: BufferedReader {
         Runtime.getRuntime().exec(cmd).waitFor()
     }
 
+    // Method to detect the type of CSI sequence.
+    private fun detectCSI() {
+        if (this.read().toChar() == '[') { // Detect arrows
+            when (this.read().toChar()) {
+                'D' -> line.position -= 1 // Left arrow
+                'C' -> line.position += 1 // Right arrow
+                '5' -> {line.position = 0; this.read()} // Start
+                '6' -> {line.position = line.text.length; this.read()} // End
+                '2' -> {line.insert = !line.insert; this.read()} // Insert
+                '3' -> {line.deleteChar(0); this.read()} // Supr
+            }
+        }
+    }
+
     // Override parent method and return just after introducing a character.
     override fun read(): Int {
         try {
@@ -35,9 +50,12 @@ class EditableBufferedReader: BufferedReader {
     override fun readLine(): String {
         line.print() // Clean the command line.
         var readChar: Int = this.read()
-        while (readChar != 13) { // Enter
-            if (readChar == 8 || readChar == 127) { // Delete
-                line.deleteChar()
+        while (readChar != Constants.ENTER) { // Enter
+            if (readChar == Constants.BACKSPACE || readChar == Constants.DELETE) { // Delete
+                line.deleteChar(-1)
+            }
+            else if (readChar == Constants.CSI_SEQ) {
+                this.detectCSI() // Detects the CSI sequence and modifies line.position.
             }
             else {
                 line.appendChar(readChar.toChar())

@@ -3,18 +3,19 @@ import java.lang.StringBuilder
 class Line {
     var position: Int = 0
     var text: String = ""
+    var insert = false
 
     fun appendChar(c: Char) {
-        var strBuilder = StringBuilder(text)
+        val strBuilder = StringBuilder(text)
         strBuilder.insert(this.position, c)
         this.text = strBuilder.toString()
         this.position = this.position+1
     }
 
-    fun deleteChar() {
-        if (this.position > 0) {
-            this.text = this.text.removeRange(this.position-1, this.position)
-            this.position -= 1
+    fun deleteChar(offset: Int) {
+        if (this.position >= 0 && this.text.isNotEmpty()) {
+            this.text = this.text.removeRange(this.position+offset, this.position+1+offset)
+            this.position += offset
         }
     }
 
