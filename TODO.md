@@ -5,7 +5,7 @@
 - [ ] Suport bàsic per ratolí.
 - [ ] Calculador d'enters.
 - [ ] Editor de text.
-- [ ] MVC amb `PropertyChangeListener/PropertyChangeSupport`.
+- [x] MVC amb `PropertyChangeListener/PropertyChangeSupport`.
 
 ## P2
 
