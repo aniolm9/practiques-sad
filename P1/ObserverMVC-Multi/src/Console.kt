@@ -24,11 +24,10 @@ class Console() : Observer {
     }
 
     private fun printLine(text: String, position: Int) {
-        val prompt = "$ "
         print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
-        print(prompt)
+        print(Constants.PROMPT)
         print(text)
-        print("\u001b[1;" + (position + prompt.length + 1).toString() + "H") // Move the cursor to position.
+        print("\u001b[1;" + (position + Constants.PROMPT.length + 1).toString() + "H") // Move the cursor to position.
     }
 
     override fun update(line: Observable, parameters: Any?) {

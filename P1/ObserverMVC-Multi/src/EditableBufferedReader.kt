@@ -1,15 +1,24 @@
 import java.io.*
 
 class EditableBufferedReader: BufferedReader {
-    var line = Line() // Model
+    private val lines: MutableList<Line> = mutableListOf()
+    private var line: Line // Model
     var console = Console() // View
 
     // Keep the parent class constructors.
     constructor(input: Reader): super(input) {
-        line.addObserver(console)
+        addLine()
+        line = lines[0]
     }
     constructor(input: Reader, sz: Int): super(input, sz) {
-        line.addObserver(console)
+        addLine()
+        line = lines[0]
+    }
+
+    private fun addLine() {
+        val newLine = Line()
+        newLine.addObserver(console)
+        lines.add(newLine)
     }
 
     // Set console mode to "raw".
@@ -30,6 +39,12 @@ class EditableBufferedReader: BufferedReader {
             when (this.read().toChar()) {
                 'D' -> if (line.position > 0) line.position -= 1 // Left arrow
                 'C' -> if (line.position < line.text.length) line.position += 1 // Right arrow
+                'A' -> {
+
+                } // Up arrow
+                'B' -> {
+
+                } // Down arrow
                 '5' -> { // Start
                     line.position = 0
                     this.read()
@@ -73,7 +88,9 @@ class EditableBufferedReader: BufferedReader {
                 this.detectCSI() // Detects the CSI sequence and modifies line.position.
             }
             else {
-                line.appendChar(readChar.toChar())
+                if (line.position + Constants.PROMPT.length + 1 < console.maxSize[1]) {
+                    line.appendChar(readChar.toChar())
+                }
             }
             readChar = this.read()
         }

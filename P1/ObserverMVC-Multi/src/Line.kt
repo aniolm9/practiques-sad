@@ -24,7 +24,7 @@ class Line() : Observable() {
     }
 
     fun deleteChar(offset: Int) {
-        if (this.position >= 0 && this.text.isNotEmpty()) {
+        if (this.position >= 0 && this.text.isNotEmpty() && this.position < this.text.length) {
             this.text = this.text.removeRange(this.position+offset, this.position+1+offset)
             this.position += offset
         }
