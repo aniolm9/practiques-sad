@@ -3,13 +3,13 @@ import java.io.InputStreamReader
 import java.util.*
 
 class Console() : Observer {
-    var maxSize = intArrayOf(0, 0)
+    var maxSize: IntArray
     init {
+        this.maxSize = updateConsoleSize()
         printLine("", 0)
-        updateConsoleSize()
     }
 
-    fun updateConsoleSize() {
+    fun updateConsoleSize(): IntArray {
         // Refresh LINES and COLUMNS.
         Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "shopt -u checkwinsize"))
         // Get LINES.
@@ -18,7 +18,7 @@ class Console() : Observer {
         // Get COLUMNS.
         proc = Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "tput cols"))
         val columns = BufferedReader(InputStreamReader(proc.inputStream)).readLine().toInt()
-        this.maxSize = intArrayOf(rows, columns)
+        return intArrayOf(rows, columns)
     }
 
     private fun printLine(text: String, position: Int) {

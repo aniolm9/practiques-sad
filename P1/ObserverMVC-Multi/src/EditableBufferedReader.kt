@@ -65,7 +65,7 @@ class EditableBufferedReader: BufferedReader {
     override fun readLine(): String {
         var readChar: Int = this.read()
         while (readChar != Constants.ENTER) { // Enter
-            console.updateConsoleSize()
+            console.maxSize = console.updateConsoleSize()
             if (readChar == Constants.BACKSPACE || readChar == Constants.DELETE) { // Delete
                 line.deleteChar(-1)
             }
@@ -77,8 +77,6 @@ class EditableBufferedReader: BufferedReader {
             }
             readChar = this.read()
         }
-        println(console.maxSize[0])
-        println(console.maxSize[1])
         return line.text
     }
 }
