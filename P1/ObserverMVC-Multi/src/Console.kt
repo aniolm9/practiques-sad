@@ -11,13 +11,15 @@ class Console() : Observer {
 
     fun updateConsoleSize(): IntArray {
         // Refresh LINES and COLUMNS.
-        Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "shopt -u checkwinsize"))
+        Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "shopt -s checkwinsize"))
         // Get LINES.
         var proc = Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "tput lines"))
         val rows = BufferedReader(InputStreamReader(proc.inputStream)).readLine().toInt()
         // Get COLUMNS.
         proc = Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "tput cols"))
         val columns = BufferedReader(InputStreamReader(proc.inputStream)).readLine().toInt()
+        // Disable refreshing.
+        Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "shopt -u checkwinsize"))
         return intArrayOf(rows, columns)
     }
 
