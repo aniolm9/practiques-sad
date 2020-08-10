@@ -2,12 +2,19 @@ import java.lang.StringBuilder
 import java.util.*
 
 class Line() : Observable() {
-    var position: Int = 0
+    var position = 0
+    var cursorX: Int = 0
     set(value) {
         field = value
         setChanged()
         notifyObservers()
     }
+    var cursorY: Int = 0
+        set(value) {
+            field = value
+            setChanged()
+            notifyObservers()
+        }
     var text: String = ""
     var insert = false
 
@@ -24,7 +31,10 @@ class Line() : Observable() {
     }
 
     fun deleteChar(offset: Int) {
-        if (this.position >= 0 && this.text.isNotEmpty() && this.position < this.text.length) {
+        if (this.position >= 0 && this.text.isNotEmpty()) {
+            if (offset == 0 && this.position >= this.text.length) {
+                return
+            }
             this.text = this.text.removeRange(this.position+offset, this.position+1+offset)
             this.position += offset
         }

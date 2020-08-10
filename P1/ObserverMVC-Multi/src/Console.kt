@@ -6,7 +6,7 @@ class Console() : Observer {
     var maxSize: IntArray
     init {
         this.maxSize = updateConsoleSize()
-        printLine("", 0)
+        printLine("", intArrayOf(0, 0))
     }
 
     fun updateConsoleSize(): IntArray {
@@ -23,16 +23,16 @@ class Console() : Observer {
         return intArrayOf(rows, columns)
     }
 
-    private fun printLine(text: String, position: Int) {
+    private fun printLine(text: String, position: IntArray) {
         print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
         print(Constants.PROMPT)
         print(text)
-        print("\u001b[1;" + (position + Constants.PROMPT.length + 1).toString() + "H") // Move the cursor to position.
+        print("\u001b[" + position[0].toString() + ";" + (position[1] + Constants.PROMPT.length + 1).toString() + "H") // Move the cursor to position.
     }
 
     override fun update(line: Observable, parameters: Any?) {
         if (line is Line) {
-            printLine(line.text, line.position)
+            printLine(line.text, intArrayOf(line.cursorX, line.cursorY))
         }
     }
 }

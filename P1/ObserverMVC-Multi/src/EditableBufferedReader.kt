@@ -88,10 +88,10 @@ class EditableBufferedReader: BufferedReader {
                 this.detectCSI() // Detects the CSI sequence and modifies line.position.
             }
             else {
-                if (line.position + Constants.PROMPT.length + 1 < console.maxSize[1]) {
-                    line.appendChar(readChar.toChar())
-                }
+                line.appendChar(readChar.toChar())
             }
+            line.cursorX = (line.position / (console.maxSize[1]-1)) + 1
+            line.cursorY = line.position % console.maxSize[1]
             readChar = this.read()
         }
         return line.text
