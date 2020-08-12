@@ -7,7 +7,7 @@ class Console() : Observer {
     init {
         this.maxSize = updateConsoleSize()
         printLine("", intArrayOf(0, Constants.PROMPT.length))
-        Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "setterm -linewrap on"))
+        Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "tput smam"))
     }
 
     fun updateConsoleSize(): IntArray {

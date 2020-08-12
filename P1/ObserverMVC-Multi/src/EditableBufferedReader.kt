@@ -1,24 +1,18 @@
 import java.io.*
+import java.lang.Integer.max
+import java.lang.Integer.min
+import kotlin.concurrent.thread
 
 class EditableBufferedReader: BufferedReader {
-    private val lines: MutableList<Line> = mutableListOf()
-    private var line: Line // Model
+    private var line: Line = Line() // Model
     var console = Console() // View
 
     // Keep the parent class constructors.
     constructor(input: Reader): super(input) {
-        addLine()
-        line = lines[0]
+        line.addObserver(console)
     }
     constructor(input: Reader, sz: Int): super(input, sz) {
-        addLine()
-        line = lines[0]
-    }
-
-    private fun addLine() {
-        val newLine = Line()
-        newLine.addObserver(console)
-        lines.add(newLine)
+        line.addObserver(console)
     }
 
     // Set console mode to "raw".
@@ -39,11 +33,11 @@ class EditableBufferedReader: BufferedReader {
             when (this.read().toChar()) {
                 'D' -> if (line.position > 0) line.position -= 1 // Left arrow
                 'C' -> if (line.position < line.text.length) line.position += 1 // Right arrow
-                'A' -> {
-
+                'A' -> if (line.cursorX > 1) {
+                    line.position = max(line.position - console.maxSize[1], 0)
                 } // Up arrow
-                'B' -> {
-
+                'B' -> if (line.cursorX <= (line.text.length + Constants.PROMPT.length) / console.maxSize[1]) {
+                    line.position = min(line.position + console.maxSize[1], line.text.length * line.cursorX)
                 } // Down arrow
                 '5' -> { // Start
                     line.position = 0
@@ -78,9 +72,18 @@ class EditableBufferedReader: BufferedReader {
 
     // Override parent method to make the line editable.
     override fun readLine(): String {
+        // Start a thread to check the window size.
+        var runningThread = true
+        thread(start = true) {
+            while (runningThread) {
+                console.maxSize = console.updateConsoleSize()
+                line.cursorX = ((line.position + Constants.PROMPT.length) / console.maxSize[1]) + 1
+                line.cursorY = (line.position + Constants.PROMPT.length) % console.maxSize[1]
+                Thread.sleep(50)
+            }
+        }
         var readChar: Int = this.read()
         while (readChar != Constants.ENTER) { // Enter
-            console.maxSize = console.updateConsoleSize()
             if (readChar == Constants.BACKSPACE || readChar == Constants.DELETE) { // Delete
                 line.deleteChar(-1)
             }
@@ -90,10 +93,9 @@ class EditableBufferedReader: BufferedReader {
             else {
                 line.appendChar(readChar.toChar())
             }
-            line.cursorX = ((line.position + Constants.PROMPT.length) / console.maxSize[1]) + 1
-            line.cursorY = (line.position + Constants.PROMPT.length) % console.maxSize[1]
             readChar = this.read()
         }
+        runningThread = false
         return line.text
     }
 }
