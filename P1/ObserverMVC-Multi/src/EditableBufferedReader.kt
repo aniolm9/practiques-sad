@@ -75,10 +75,14 @@ class EditableBufferedReader: BufferedReader {
         // Start a thread to check the window size.
         var runningThread = true
         thread(start = true) {
+            var prevSize: IntArray
             while (runningThread) {
+                prevSize = console.maxSize
                 console.maxSize = console.updateConsoleSize()
-                line.cursorX = ((line.position + Constants.PROMPT.length) / console.maxSize[1]) + 1
-                line.cursorY = (line.position + Constants.PROMPT.length) % console.maxSize[1]
+                if (!prevSize.contentEquals(console.maxSize)) {
+                    line.cursorX = ((line.position + Constants.PROMPT.length) / console.maxSize[1]) + 1
+                    line.cursorY = (line.position + Constants.PROMPT.length) % console.maxSize[1]
+                }
                 Thread.sleep(50)
             }
         }
@@ -93,6 +97,8 @@ class EditableBufferedReader: BufferedReader {
             else {
                 line.appendChar(readChar.toChar())
             }
+            line.cursorX = ((line.position + Constants.PROMPT.length) / console.maxSize[1]) + 1
+            line.cursorY = (line.position + Constants.PROMPT.length) % console.maxSize[1]
             readChar = this.read()
         }
         runningThread = false
