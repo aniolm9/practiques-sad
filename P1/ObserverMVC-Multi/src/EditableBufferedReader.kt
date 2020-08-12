@@ -90,8 +90,8 @@ class EditableBufferedReader: BufferedReader {
             else {
                 line.appendChar(readChar.toChar())
             }
-            line.cursorX = (line.position / (console.maxSize[1]-1)) + 1
-            line.cursorY = line.position % console.maxSize[1]
+            line.cursorX = ((line.position + Constants.PROMPT.length) / console.maxSize[1]) + 1
+            line.cursorY = (line.position + Constants.PROMPT.length) % console.maxSize[1]
             readChar = this.read()
         }
         return line.text

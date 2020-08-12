@@ -6,7 +6,8 @@ class Console() : Observer {
     var maxSize: IntArray
     init {
         this.maxSize = updateConsoleSize()
-        printLine("", intArrayOf(0, 0))
+        printLine("", intArrayOf(0, Constants.PROMPT.length))
+        Runtime.getRuntime().exec(arrayOf("/bin/bash", "-c", "setterm -linewrap on"))
     }
 
     fun updateConsoleSize(): IntArray {
@@ -27,7 +28,7 @@ class Console() : Observer {
         print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
         print(Constants.PROMPT)
         print(text)
-        print("\u001b[" + position[0].toString() + ";" + (position[1] + Constants.PROMPT.length + 1).toString() + "H") // Move the cursor to position.
+        print("\u001b[" + position[0].toString() + ";" + (position[1] + 1).toString() + "H") // Move the cursor to position.
     }
 
     override fun update(line: Observable, parameters: Any?) {
