@@ -1,7 +1,7 @@
 # TODO
 ## P1
 - [ ] Fer servir Scanner i regex per parsejar l'entrada.
-- [ ] Edició multilínia.
+- [x] Edició multilínia.
 - [ ] Suport bàsic per ratolí.
 - [ ] Calculador d'enters.
 - [ ] Editor de text.
