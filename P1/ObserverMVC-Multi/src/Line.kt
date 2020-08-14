@@ -2,19 +2,12 @@ import java.lang.StringBuilder
 import java.util.*
 
 class Line() : Observable() {
-    var position = 0
-    var cursorX: Int = 0
+    var position: Int = 0
     set(value) {
         field = value
         setChanged()
         notifyObservers()
     }
-    var cursorY: Int = 0
-        set(value) {
-            field = value
-            setChanged()
-            notifyObservers()
-        }
     var text: String = ""
     var insert = false
 
