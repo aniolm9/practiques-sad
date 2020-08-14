@@ -30,8 +30,8 @@ class EditableBufferedReader: BufferedReader {
     private fun detectCSI() {
         val lastPosition = line.position
         line.position = console.maxSize[1]*console.maxSize[0]
-        var nextChar = this.read().toChar()
-        if (nextChar == '[') { // Detect arrows
+        var nextChar = this.read()
+        if (nextChar.toChar() == '[') { // Detect arrows
             line.position = lastPosition
             line.editableMode = true
             when (this.read().toChar()) {
@@ -61,15 +61,18 @@ class EditableBufferedReader: BufferedReader {
                 }
             }
         }
-        else if (nextChar == ':') {
+        else if (nextChar.toChar() == ':') {
             print(":")
-            nextChar = this.read().toChar()
-            print(nextChar)
+            nextChar = this.read()
+            print(nextChar.toChar())
             when (nextChar) {
-                'q' -> line.editableMode = false
-                'i' -> line.position = lastPosition
-                else -> line.position = lastPosition
+                'q'.toInt() -> line.editableMode = false
+                'i'.toInt() -> line.position = lastPosition
+                Constants.CSI_SEQ -> detectCSI()
             }
+        }
+        else if (nextChar == Constants.CSI_SEQ ){
+            detectCSI()
         }
         else {
             line.position = lastPosition
