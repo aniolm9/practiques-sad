@@ -9,11 +9,10 @@ class Line() : Observable() {
         notifyObservers()
     }
     var text: String = ""
-    var insert = false
 
-    fun appendChar(c: Char) {
+    fun appendChar(c: Char, mode: Boolean) {
         val strBuilder = StringBuilder(text)
-        if (insert && position < text.length) {
+        if (mode && position < text.length) {
             strBuilder.setCharAt(position, c)
         }
         else {

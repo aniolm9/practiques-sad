@@ -5,7 +5,7 @@ import kotlin.concurrent.thread
 
 class Console() : Observer {
     var maxSize: IntArray
-    var cursorPosition = intArrayOf(0, Constants.PROMPT.length)
+    var cursorPosition = intArrayOf(0, 0)
     var lastPosition: Int = 0
     var lastText = ""
     var runningThread = true
@@ -20,8 +20,8 @@ class Console() : Observer {
                 prevSize = this.maxSize
                 this.maxSize = this.updateConsoleSize()
                 if (!prevSize.contentEquals(this.maxSize)) {
-                    cursorPosition[0] = ((this.lastPosition + Constants.PROMPT.length) / this.maxSize[1]) + 1
-                    cursorPosition[1] = (this.lastPosition + Constants.PROMPT.length) % this.maxSize[1]
+                    cursorPosition[0] = (this.lastPosition / this.maxSize[1]) + 1
+                    cursorPosition[1] = this.lastPosition % this.maxSize[1]
                     this.printLine(lastText)
                 }
                 Thread.sleep(50)
@@ -49,7 +49,6 @@ class Console() : Observer {
 
     private fun printLine(text: String) {
         print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
-        print(Constants.PROMPT)
         print(text)
         print("\u001b[" + cursorPosition[0].toString() + ";" + (cursorPosition[1] + 1).toString() + "H") // Move the cursor to position.
     }
@@ -58,8 +57,8 @@ class Console() : Observer {
         if (line is Line) {
             lastPosition = line.position
             lastText = line.text
-            cursorPosition[0] = ((line.position + Constants.PROMPT.length) / this.maxSize[1]) + 1
-            cursorPosition[1] = (line.position + Constants.PROMPT.length) % this.maxSize[1]
+            cursorPosition[0] = (line.position / this.maxSize[1]) + 1
+            cursorPosition[1] = line.position % this.maxSize[1]
             printLine(line.text)
         }
     }
