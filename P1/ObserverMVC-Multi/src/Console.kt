@@ -9,6 +9,7 @@ class Console() : Observer {
     var lastPosition: Int = 0
     var lastText = ""
     var runningThread = true
+    var currentLine = 0
     init {
         this.maxSize = updateConsoleSize()
         printLine("")
@@ -57,7 +58,7 @@ class Console() : Observer {
         if (line is Line) {
             lastPosition = line.position
             lastText = line.text
-            cursorPosition[0] = (line.position / this.maxSize[1]) + 1
+            cursorPosition[0] = currentLine
             cursorPosition[1] = line.position % this.maxSize[1]
             printLine(line.text)
         }

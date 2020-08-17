@@ -92,10 +92,11 @@ class EditableBufferedReader: BufferedReader {
 
     // Override parent method to make the line editable.
     override fun readLine(): String {
-        var readChar: Int = this.read()
-        var previousLine = 0
-        while (true) { // Enter
+        var readChar: Int
+        var previousLine = currentLine
+        while (previousLine == currentLine) { // Enter
             previousLine = currentLine
+            readChar = this.read()
             if (readChar == Constants.BACKSPACE || readChar == Constants.DELETE) { // Delete
                 if (lines[currentLine].text.isNotEmpty()) {
                     lines[currentLine].deleteChar(-1)
@@ -117,14 +118,16 @@ class EditableBufferedReader: BufferedReader {
             else {
                 lines[currentLine].appendChar(readChar.toChar(), insert)
             }
-            if (previousLine != currentLine) break
-            readChar = this.read()
         }
         return lines[previousLine].text
     }
 
     fun readLines(): String {
-        val str = readLine()
+        var str = readLine()
+        while (str != "\n") {
+            str = readLine()
+            console.currentLine = this.currentLine
+        }
         console.stop()
         return str
     }

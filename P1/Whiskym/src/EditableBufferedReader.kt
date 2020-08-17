@@ -5,6 +5,7 @@ import java.lang.Integer.min
 class EditableBufferedReader: BufferedReader {
     private var line: Line = Line() // Model
     var console = Console() // View
+    var save = false
 
     // Keep the parent class constructors.
     constructor(input: Reader): super(input) {
@@ -68,10 +69,14 @@ class EditableBufferedReader: BufferedReader {
             when (nextChar) {
                 'q'.toInt() -> line.editableMode = false
                 'i'.toInt() -> line.position = lastPosition
+                'w'.toInt() -> {
+                    save = true
+                    line.editableMode = false
+                }
                 Constants.CSI_SEQ -> detectCSI()
             }
         }
-        else if (nextChar == Constants.CSI_SEQ ){
+        else if (nextChar == Constants.CSI_SEQ ) {
             detectCSI()
         }
         else {
@@ -93,7 +98,7 @@ class EditableBufferedReader: BufferedReader {
     // Override parent method to make the line editable.
     override fun readLine(): String {
         var readChar: Int = this.read()
-        while (true) { // Enter
+        while (true) {
             if (readChar == Constants.BACKSPACE || readChar == Constants.DELETE) { // Delete
                 line.deleteChar(-1)
             }
@@ -102,7 +107,11 @@ class EditableBufferedReader: BufferedReader {
                 if (!line.editableMode) break
             }
             else {
-                line.appendChar(readChar.toChar())
+                if (readChar == Constants.ENTER) {
+                    line.appendChar('\n')
+                    line.position += console.maxSize[1] - (line.position % console.maxSize[1])
+                }
+                else line.appendChar(readChar.toChar())
             }
             readChar = this.read()
         }

@@ -20,8 +20,7 @@ class Console() : Observer {
                 prevSize = this.maxSize
                 this.maxSize = this.updateConsoleSize()
                 if (!prevSize.contentEquals(this.maxSize)) {
-                    cursorPosition[0] = ((this.lastPosition + Constants.PROMPT.length) / this.maxSize[1]) + 1
-                    cursorPosition[1] = (this.lastPosition + Constants.PROMPT.length) % this.maxSize[1]
+                    updateCursor(lastPosition)
                     this.printLine(lastText)
                 }
                 Thread.sleep(50)
@@ -31,6 +30,11 @@ class Console() : Observer {
 
     fun stop() {
         runningThread = false
+    }
+
+    private fun updateCursor(position: Int) {
+        cursorPosition[0] = ((position + Constants.PROMPT.length) / this.maxSize[1]) + 1
+        cursorPosition[1] = (position + Constants.PROMPT.length) % this.maxSize[1]
     }
 
     private fun updateConsoleSize(): IntArray {
@@ -58,8 +62,7 @@ class Console() : Observer {
         if (line is Line) {
             lastPosition = line.position
             lastText = line.text
-            cursorPosition[0] = ((line.position + Constants.PROMPT.length) / this.maxSize[1]) + 1
-            cursorPosition[1] = (line.position + Constants.PROMPT.length) % this.maxSize[1]
+            updateCursor(line.position)
             printLine(line.text)
         }
     }
