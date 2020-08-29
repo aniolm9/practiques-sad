@@ -1,16 +1,15 @@
+import java.beans.PropertyChangeSupport
 import java.lang.StringBuilder
-import java.util.*
 
-class Line() : Observable() {
+class Line() {
     var position: Int = 0
-    set(value) {
-        field = value
-        setChanged()
-        notifyObservers()
-    }
+        set(value) {
+            changes.firePropertyChange("position", position, value)
+            field = value
+        }
     var text: String = ""
     var insert = false
-    var editableMode = true
+    val changes: PropertyChangeSupport = PropertyChangeSupport(this)
 
     fun appendChar(c: Char) {
         val strBuilder = StringBuilder(text)
