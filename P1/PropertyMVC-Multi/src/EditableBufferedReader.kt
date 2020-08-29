@@ -17,6 +17,8 @@ class EditableBufferedReader: BufferedReader {
         lines.changes.addPropertyChangeListener(console)
     }
 
+    private fun Boolean.toInt() = if (this) 1 else 0
+
     // Set console mode to "raw".
     private fun setRaw() {
         val cmd = arrayOf("/bin/sh", "-c", "stty -echo raw < /dev/tty")
@@ -36,7 +38,7 @@ class EditableBufferedReader: BufferedReader {
                 'D' -> if (lineArray[lines.currentLine].position > 0) {
                     lineArray[lines.currentLine].position -= 1
                 } // Left arrow
-                'C' -> if (lineArray[lines.currentLine].position < lineArray[lines.currentLine].text.length) {
+                'C' -> if (lineArray[lines.currentLine].position < lineArray[lines.currentLine].text.length - lineArray[lines.currentLine].text.contains('\n').toInt()) {
                     lineArray[lines.currentLine].position += 1
                 } // Right arrow
                 'A' -> if (lines.currentLine >= 1) {
