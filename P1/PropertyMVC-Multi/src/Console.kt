@@ -44,6 +44,14 @@ class Console() : PropertyChangeListener {
             }
             else if (p0.propertyName == "currentLine") {
                 currentLine = p0.newValue as Int
+                // Make sure to get at position = 0 when creating a new line.
+                try {
+                    // If we are creating a new line we'll get an IndexOutOfBoundsException.
+                    lines[currentLine]
+                }
+                catch (e: IndexOutOfBoundsException) {
+                    position = 0
+                }
             }
             else if (p0.propertyName == "lineArray") {
                 lines = p0.newValue as LinkedList<*>
