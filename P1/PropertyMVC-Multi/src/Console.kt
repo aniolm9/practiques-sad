@@ -8,7 +8,7 @@ class Console() : PropertyChangeListener {
     var position: Int = 0
     var currentLine: Int = 0
     var consoleSize: IntArray = intArrayOf(0, 0)
-    var lines: LinkedList<Line> = LinkedList<Line>()
+    var lines: LinkedList<*> = LinkedList<Line>()
 
     init {
         consoleSize = updateConsoleSize()
@@ -32,7 +32,7 @@ class Console() : PropertyChangeListener {
     private fun printLines() {
         print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
         for (line in lines) {
-            print(line.text)
+            print((line as Line).text)
         }
         print("\u001b[" + (currentLine + 1).toString() + ";" + (position + 1).toString() + "H") // Move the cursor to position.
     }
@@ -46,7 +46,7 @@ class Console() : PropertyChangeListener {
                 currentLine = p0.newValue as Int
             }
             else if (p0.propertyName == "lineArray") {
-                lines = p0.newValue as LinkedList<Line>
+                lines = p0.newValue as LinkedList<*>
             }
             printLines()
         }
