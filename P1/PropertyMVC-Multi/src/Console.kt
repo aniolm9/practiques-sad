@@ -47,7 +47,7 @@ class Console() : PropertyChangeListener {
                 // Make sure to get at position = 0 when creating a new line.
                 try {
                     // If we are creating a new line we'll get an IndexOutOfBoundsException.
-                    lines[currentLine]
+                    if ((lines[currentLine] as Line).text == "") position = 0
                 }
                 catch (e: IndexOutOfBoundsException) {
                     position = 0
