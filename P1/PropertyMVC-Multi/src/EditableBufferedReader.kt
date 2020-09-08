@@ -43,7 +43,7 @@ class EditableBufferedReader: BufferedReader {
                 } // Right arrow
                 'A' -> if (lines.currentLine >= 1) {
                     lines.currentLine -= 1
-                    lineArray[lines.currentLine].position = Integer.min(lineArray[lines.currentLine + 1].position, lineArray[lines.currentLine].text.length)
+                    lineArray[lines.currentLine].position = Integer.min(lineArray[lines.currentLine + 1].position, lineArray[lines.currentLine].text.length - lineArray[lines.currentLine].text.contains('\n').toInt())
                 } // Up arrow
                 'B' -> if (lines.currentLine < lineArray.size-1) {
                     lines.currentLine += 1
@@ -108,8 +108,8 @@ class EditableBufferedReader: BufferedReader {
             }
             else if (readChar == Constants.ENTER) {
                 lineArray[lines.currentLine].appendChar('\n')
+                lines.addLine(lines.currentLine+1, console)
                 lines.currentLine += 1
-                lines.addLine(lines.currentLine, console)
             }
             else {
                 lineArray[lines.currentLine].appendChar(readChar.toChar())
@@ -124,9 +124,9 @@ class EditableBufferedReader: BufferedReader {
 
     fun readLines() {
         lines.currentLine = 0 // Trigger
-        //File("/tmp/foo").writeText("")
+        File("/tmp/foo").writeText("")
         while (true) {
-            //File("/tmp/foo").appendText(readLine())
+            File("/tmp/foo").appendText(lines.currentLine.toString())
             readLine()
         }
     }
