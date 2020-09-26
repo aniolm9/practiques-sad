@@ -14,9 +14,14 @@ class Lines() {
 
     fun addLine(index: Int, view: Console) {
         var text = ""
-        // Start new lines with a newline at the end. If you are not at EOF not doing this causes undesired behavior.
         try {
+            // Start new lines with a newline at the end. If you are not at EOF not doing this causes undesired behavior.
             if (lineArray[currentLine].position == lineArray[currentLine].text.length - 1) text = "\n"
+            // Move the substring from the cursor position to the end to a new line after clicking enter.
+            else {
+                text = lineArray[currentLine].text.substring(lineArray[currentLine].position)
+                lineArray[currentLine].text = lineArray[currentLine].text.replace(text, "")
+            }
         }
         catch (e: IndexOutOfBoundsException) {}
         val line = Line(text)

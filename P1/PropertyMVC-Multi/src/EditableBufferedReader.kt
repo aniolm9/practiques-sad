@@ -125,13 +125,13 @@ class EditableBufferedReader: BufferedReader {
 
     fun readLines() {
         lines.currentLine = 0 // Trigger
-        File("/tmp/foo").writeText("")
         while (true) {
-            var string = ""
+            File("/tmp/foo").writeText("")
+            var i = 1
             for (l in lineArray) {
-                string += l.text
+                File("/tmp/foo").appendText(i.toString() + " " + l.text)
+                i++
             }
-            File("/tmp/foo").writeText(string)
             readLine()
         }
     }
