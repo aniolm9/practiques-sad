@@ -62,11 +62,11 @@ class EditableBufferedReader: BufferedReader {
                     this.read()
                 }
                 '3' -> { // Supr
-                    if (lineArray[lines.currentLine].text.isNotEmpty())  {
+                    if (lineArray[lines.currentLine].text.substring(lineArray[lines.currentLine].position) != "\n")  {
                         lineArray[lines.currentLine].deleteChar(0)
                     }
                     else if (lineArray.size > 1) {
-                        lineArray.removeAt(lines.currentLine)
+                        lines.removeLine(lines.currentLine+1)
                     }
                     this.read()
                     lines.currentLine = lines.currentLine // Trigger
@@ -94,13 +94,11 @@ class EditableBufferedReader: BufferedReader {
             previousLine = lines.currentLine
             readChar = this.read()
             if (readChar == Constants.BACKSPACE || readChar == Constants.DELETE) { // Delete
-                if (lineArray[lines.currentLine].text.isNotEmpty()) {
+                if (lineArray[lines.currentLine].position > 0) {
                     lineArray[lines.currentLine].deleteChar(-1)
                 }
-                else if (lineArray.size > 1) {
-                    lineArray.removeAt(lines.currentLine)
-                    lines.currentLine -= 1
-                    lineArray[lines.currentLine].position = lineArray[lines.currentLine].text.length - 1
+                else if (lines.currentLine >= 1) {
+                    lines.removeLine(lines.currentLine)
                 }
             }
             else if (readChar == Constants.CSI_SEQ) {

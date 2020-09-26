@@ -28,4 +28,19 @@ class Lines() {
         line.changes.addPropertyChangeListener(view)
         lineArray.add(index, line)
     }
+
+    fun removeLine(index: Int) {
+        if (index == currentLine+1) {
+            try {
+                lineArray[currentLine].text = lineArray[currentLine].text.replace("\n", "") + lineArray[currentLine + 1].text
+                lineArray.removeAt(index)
+            } catch (e: IndexOutOfBoundsException) {
+            }
+        }
+        else if (index == currentLine) {
+            lineArray.removeAt(currentLine)
+            currentLine -= 1
+            lineArray[currentLine].position = lineArray[currentLine].text.length - 1
+        }
+    }
 }
