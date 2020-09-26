@@ -38,9 +38,11 @@ class Lines() {
             }
         }
         else if (index == currentLine) {
+            val newPosition = lineArray[currentLine - 1].text.length - 1
+            lineArray[currentLine - 1].text = lineArray[currentLine - 1].text.replace("\n", "") + lineArray[currentLine].text
             lineArray.removeAt(currentLine)
             currentLine -= 1
-            lineArray[currentLine].position = lineArray[currentLine].text.length - 1
+            lineArray[currentLine].position = newPosition
         }
     }
 }

@@ -68,6 +68,7 @@ class EditableBufferedReader: BufferedReader {
                     else if (lineArray.size > 1) {
                         lines.removeLine(lines.currentLine+1)
                     }
+                    lines.currentLine = lines.currentLine // Trigger
                     this.read()
                 }
             }
