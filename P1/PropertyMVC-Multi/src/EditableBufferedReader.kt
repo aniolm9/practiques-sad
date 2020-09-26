@@ -42,12 +42,12 @@ class EditableBufferedReader: BufferedReader {
                     lineArray[lines.currentLine].position += 1
                 } // Right arrow
                 'A' -> if (lines.currentLine >= 1) {
+                    lineArray[lines.currentLine - 1].position = Integer.min(lineArray[lines.currentLine].position, lineArray[lines.currentLine - 1].text.length - lineArray[lines.currentLine - 1].text.contains('\n').toInt())
                     lines.currentLine -= 1
-                    lineArray[lines.currentLine].position = Integer.min(lineArray[lines.currentLine + 1].position, lineArray[lines.currentLine].text.length - lineArray[lines.currentLine].text.contains('\n').toInt())
                 } // Up arrow
                 'B' -> if (lines.currentLine < lineArray.size-1) {
+                    lineArray[lines.currentLine + 1].position = Integer.min(lineArray[lines.currentLine].position, lineArray[lines.currentLine + 1].text.length - lineArray[lines.currentLine + 1].text.contains('\n').toInt())
                     lines.currentLine += 1
-                    lineArray[lines.currentLine].position = Integer.min(lineArray[lines.currentLine - 1].position, lineArray[lines.currentLine].text.length)
                 } // Down arrow
                 '5' -> { // Start
                     lineArray[lines.currentLine].position = 0
@@ -69,7 +69,6 @@ class EditableBufferedReader: BufferedReader {
                         lines.removeLine(lines.currentLine+1)
                     }
                     this.read()
-                    lines.currentLine = lines.currentLine // Trigger
                 }
             }
         }
@@ -106,7 +105,7 @@ class EditableBufferedReader: BufferedReader {
             }
             else if (readChar == Constants.ENTER) {
                 lineArray[lines.currentLine].appendChar('\n')
-                lines.addLine(lines.currentLine+1, console)
+                lines.addLine(lines.currentLine + 1, console)
                 lineArray[lines.currentLine].position = 0
                 lines.currentLine += 1
             }

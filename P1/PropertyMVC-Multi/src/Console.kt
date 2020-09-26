@@ -44,6 +44,7 @@ class Console() : PropertyChangeListener {
             }
             else if (p0.propertyName == "currentLine") {
                 currentLine = p0.newValue as Int
+                position = (lines[currentLine] as Line).position
                 // Make sure to get at position = 0 when creating a new line.
                 try {
                     // If we are creating a new line we'll get an IndexOutOfBoundsException.
