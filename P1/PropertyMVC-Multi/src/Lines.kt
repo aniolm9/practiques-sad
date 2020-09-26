@@ -1,4 +1,5 @@
 import java.beans.PropertyChangeSupport
+import java.lang.IndexOutOfBoundsException
 import java.util.*
 
 class Lines() {
@@ -12,7 +13,13 @@ class Lines() {
     val changes: PropertyChangeSupport = PropertyChangeSupport(this)
 
     fun addLine(index: Int, view: Console) {
-        val line = Line()
+        var text = ""
+        // Start new lines with a newline at the end. If you are not at EOF not doing this causes undesired behavior.
+        try {
+            if (lineArray[currentLine].position == lineArray[currentLine].text.length - 1) text = "\n"
+        }
+        catch (e: IndexOutOfBoundsException) {}
+        val line = Line(text)
         line.changes.addPropertyChangeListener(view)
         lineArray.add(index, line)
     }

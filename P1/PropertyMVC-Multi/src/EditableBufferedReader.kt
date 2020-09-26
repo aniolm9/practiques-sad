@@ -109,6 +109,7 @@ class EditableBufferedReader: BufferedReader {
             else if (readChar == Constants.ENTER) {
                 lineArray[lines.currentLine].appendChar('\n')
                 lines.addLine(lines.currentLine+1, console)
+                lineArray[lines.currentLine].position = 0
                 lines.currentLine += 1
             }
             else {
@@ -126,7 +127,11 @@ class EditableBufferedReader: BufferedReader {
         lines.currentLine = 0 // Trigger
         File("/tmp/foo").writeText("")
         while (true) {
-            File("/tmp/foo").appendText(lines.currentLine.toString())
+            var string = ""
+            for (l in lineArray) {
+                string += l.text
+            }
+            File("/tmp/foo").writeText(string)
             readLine()
         }
     }

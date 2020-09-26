@@ -1,17 +1,21 @@
 import java.beans.PropertyChangeSupport
 import java.lang.StringBuilder
 
-class Line() {
+class Line(firstText: String = "") {
     var position: Int = 0
         set(value) {
             changes.firePropertyChange("position", position, value)
             field = value
         }
-    var text: String = ""
+    var text: String = firstText
     var insert = false
     val changes: PropertyChangeSupport = PropertyChangeSupport(this)
 
     fun appendChar(c: Char) {
+        // Do not append a newline char if the line already ends with it.
+        if (position == text.length - 1 && text.endsWith("\n") && c == '\n') {
+            return
+        }
         val strBuilder = StringBuilder(text)
         if (insert && position < text.length) {
             strBuilder.setCharAt(position, c)
