@@ -7,6 +7,8 @@ import java.util.*
 class Console() : PropertyChangeListener {
     var position: Int = 0
     var currentLine: Int = 0
+    var currentText: String = ""
+    var cursorPosition = intArrayOf(0, 0)
     var consoleSize: IntArray = intArrayOf(0, 0)
     var lines: LinkedList<*> = LinkedList<Line>()
 
@@ -29,18 +31,32 @@ class Console() : PropertyChangeListener {
         return intArrayOf(rows, columns)
     }
 
+    private fun getPrintedLines(endLine: Int): Int {
+        var logicLinesCounter = 0
+        var physicalLinesCounter = 0
+        for (line in lines) {
+            if (logicLinesCounter >= endLine) break
+            physicalLinesCounter += (line as Line).text.length / consoleSize[1] + 1
+            logicLinesCounter++
+        }
+        return physicalLinesCounter
+    }
+
     private fun printLines() {
         print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
         for (line in lines) {
             print((line as Line).text)
         }
-        print("\u001b[" + (currentLine + 1).toString() + ";" + (position + 1).toString() + "H") // Move the cursor to position.
+        print("\u001b[" + (cursorPosition[0] + 1).toString() + ";" + (cursorPosition[1] + 1).toString() + "H") // Move the cursor to position.
     }
 
     override fun propertyChange(p0: PropertyChangeEvent?) {
         if (p0 != null) {
             if (p0.propertyName == "position") {
                 position = p0.newValue as Int
+            }
+            else if (p0.propertyName == "text") {
+                currentText = p0.newValue as String
             }
             else if (p0.propertyName == "currentLine") {
                 currentLine = p0.newValue as Int
@@ -57,6 +73,8 @@ class Console() : PropertyChangeListener {
             else if (p0.propertyName == "lineArray") {
                 lines = p0.newValue as LinkedList<*>
             }
+            cursorPosition[0] = currentText.length / consoleSize[1] + getPrintedLines(currentLine)
+            cursorPosition[1] = position % consoleSize[1]
             printLines()
         }
     }
