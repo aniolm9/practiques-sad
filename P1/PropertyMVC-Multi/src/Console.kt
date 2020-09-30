@@ -7,7 +7,6 @@ import java.util.*
 class Console() : PropertyChangeListener {
     var position: Int = 0
     var currentLine: Int = 0
-    var currentText: String = ""
     var cursorPosition = intArrayOf(0, 0)
     var consoleSize: IntArray = intArrayOf(0, 0)
     var lines: LinkedList<*> = LinkedList<Line>()
@@ -43,7 +42,7 @@ class Console() : PropertyChangeListener {
     }
 
     private fun printLines() {
-        print("\u001b[H\u001b[2J") // Clean (2J) and move the cursor to (0,0) (H).
+        print("\u001bc\u001b[3J\u001b[H\u001b[2J") // Reset, clean (2J) and move the cursor to (0,0) (H).
         for (line in lines) {
             print((line as Line).text)
         }
@@ -54,9 +53,6 @@ class Console() : PropertyChangeListener {
         if (p0 != null) {
             if (p0.propertyName == "position") {
                 position = p0.newValue as Int
-            }
-            else if (p0.propertyName == "text") {
-                currentText = p0.newValue as String
             }
             else if (p0.propertyName == "currentLine") {
                 currentLine = p0.newValue as Int
@@ -73,7 +69,7 @@ class Console() : PropertyChangeListener {
             else if (p0.propertyName == "lineArray") {
                 lines = p0.newValue as LinkedList<*>
             }
-            cursorPosition[0] = currentText.length / consoleSize[1] + getPrintedLines(currentLine)
+            cursorPosition[0] = position / consoleSize[1] + getPrintedLines(currentLine)
             cursorPosition[1] = position % consoleSize[1]
             printLines()
         }

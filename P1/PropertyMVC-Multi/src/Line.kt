@@ -8,10 +8,6 @@ class Line(firstText: String = "") {
             field = value
         }
     var text: String = firstText
-        set(value) {
-            changes.firePropertyChange("text", text, value)
-            field = value
-        }
     var insert = false
     val changes: PropertyChangeSupport = PropertyChangeSupport(this)
 
