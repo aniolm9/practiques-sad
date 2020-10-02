@@ -60,8 +60,8 @@ class Console() : PropertyChangeListener {
     private fun printLines() {
         print("\u001bc\u001b[3J\u001b[H\u001b[2J") // Reset, clean (2J) and move the cursor to (0,0) (H).
         // WIP
-        val firstLine = Integer.max((getPrintedLines(currentLine) / consoleSize[0]) * (consoleSize[0] + 1) - (getPrintedLines(currentLine) / consoleSize[0]), 0)
-        val lastLine = Integer.min(firstLine + consoleSize[0], lines.size)
+        val lastLine = Integer.min(consoleSize[0] - cursorPosition[0] + currentLine + 1, lines.size) // :(
+        val firstLine = Integer.max(lastLine - consoleSize[0], 0)
         //
         for (line in lines.subList(firstLine, lastLine)) {
             print((line as Line).text)
@@ -89,7 +89,7 @@ class Console() : PropertyChangeListener {
             else if (p0.propertyName == "lineArray") {
                 lines = p0.newValue as LinkedList<*>
             }
-            cursorPosition[0] = (position / consoleSize[1] + getPrintedLines(currentLine)) % consoleSize[0]
+            cursorPosition[0] = Integer.min(position / consoleSize[1] + getPrintedLines(currentLine), consoleSize[0])
             cursorPosition[1] = position % consoleSize[1]
             printLines()
         }
