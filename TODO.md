@@ -1,11 +1,12 @@
 # TODO
 ## P1
 - [ ] Fer servir Scanner i regex per parsejar l'entrada.
-- [x] Edició multilínia.
+- [ ] Edició multilínia.
+ * Quasi està, només falta calcular bé el cursorPosition[0] a la vista.
 - [ ] Suport bàsic per ratolí.
 - [ ] Calculador d'enters.
 - [ ] Editor de text.
-- [x] MVC amb `PropertyChangeListener/PropertyChangeSupport`.
+ * Trivial un cop es té el multilínia.
 
 ## P2
 
