@@ -21,7 +21,6 @@ class ChatServer(var port: Int) {
         }
         while (true) {
             val socket: MySocket = ss.accept()
-            println("Accepted socket.")
             val newClient = ClientThread(this, socket)
             threads.add(newClient)
             newClient.start()
@@ -30,8 +29,8 @@ class ChatServer(var port: Int) {
 
     fun broadcast(message: String, sender: String) {
         for (nick in users.keys) {
-            println("Broadcasting: $message")
             if (nick != sender) {
+                println("Broadcasting: $message")
                 users[nick]?.writeMsg(message)
             }
         }

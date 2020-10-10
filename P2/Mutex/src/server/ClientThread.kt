@@ -5,11 +5,10 @@ import MySocket
 class ClientThread(var server: ChatServer, var socket: MySocket): Thread() {
     override fun run() {
         // Get the new user nickname.
-        var nick : String
         var clientMsg : String
         var serverMsg : String
-        nick = socket.readMsg()
-        println("$nick patata")
+        // TODO: Check nick uniqueness.
+        val nick : String = socket.readMsg()
         server.addUser(nick, socket)
         serverMsg = "$nick connected to the server."
         server.broadcast(serverMsg, nick)

@@ -25,38 +25,12 @@ class MySocket: Socket {
         }
     }
 
-    /*override fun getInputStream(): InputStream {
-        val inStream: InputStream
-        try {
-            inStream = super.getInputStream()
-            br = BufferedReader(InputStreamReader(inStream))
-            return inStream
-        }
-        catch (e: IOException) {
-            println("Couldn't get input stream.")
-            exitProcess(1)
-        }
-    }
-
-    override fun getOutputStream(): OutputStream {
-        val outStream: OutputStream
-        try {
-            outStream = super.getOutputStream()
-            pw = PrintWriter(outStream, true)
-            return outStream
-        }
-        catch (e: IOException) {
-            println("Couldn't get input stream.")
-            exitProcess(1)
-        }
-    }*/
-
     fun readMsg(): String {
         return br.readLine() ?: ""
     }
 
     fun writeMsg(text: String) {
-        pw.print(text)
+        pw.println(text)
     }
 
     override fun close() {

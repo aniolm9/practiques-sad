@@ -8,7 +8,7 @@ class WriteThread(private val socket: MySocket, var username: String): Thread() 
 
         var text: String
         do {
-            print("> ")
+            //print("> ")
             text = readLine().toString()
             socket.writeMsg(text)
         } while (text.toLowerCase() != "bye")
