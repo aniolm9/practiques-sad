@@ -19,11 +19,12 @@ class ClientThread(var server: ChatServer, var socket: MySocket): Thread() {
         server.broadcast(serverMsg, nick)
 
         // Forward messages until we get a null.
-        do {
-            clientMsg = socket.readMsg()
+        clientMsg = socket.readMsg()
+        while (clientMsg != null) {
             serverMsg = "[$nick] $clientMsg"
             server.broadcast(serverMsg, nick)
-        } while (clientMsg != null)
+            clientMsg = socket.readMsg()
+        }
 
         // Remove a user that exited the server
         server.removeUser(nick, this)
