@@ -6,7 +6,8 @@ class ReadThread(private val socket: MySocket): Thread() {
     override fun run() {
         var text = socket.readMsg()
         while (text != null) {
-            println(text)
+            println("\r" + text)
+            print("[you] ")
             text = socket.readMsg()
         }
     }
