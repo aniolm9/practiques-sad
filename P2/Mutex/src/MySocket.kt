@@ -25,8 +25,8 @@ class MySocket: Socket {
         }
     }
 
-    fun readMsg(): String {
-        return br.readLine() ?: ""
+    fun readMsg(): String? {
+        return br.readLine()
     }
 
     fun writeMsg(text: String) {

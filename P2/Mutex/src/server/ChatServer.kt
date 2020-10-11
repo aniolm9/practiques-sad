@@ -37,7 +37,7 @@ class ChatServer(var port: Int) {
     }
 
     // TODO: MUTEX
-    fun addUser(nick: String, socket: MySocket): Boolean {
+    @Synchronized fun addUser(nick: String, socket: MySocket): Boolean {
         if (!users.containsKey(nick)) {
             users[nick] = socket
             return true
@@ -45,7 +45,7 @@ class ChatServer(var port: Int) {
         return false
     }
 
-    fun removeUser(nick: String, thread: ClientThread) {
+    @Synchronized fun removeUser(nick: String, thread: ClientThread) {
         if (users.remove(nick, users[nick] as MySocket)) threads.remove(thread)
     }
 }
