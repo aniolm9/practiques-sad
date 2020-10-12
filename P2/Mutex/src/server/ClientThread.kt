@@ -17,11 +17,12 @@ class ClientThread(private var server: ChatServer, private var socket: MySocket)
             socket.close()
             return
         }
+        // If the username doesn't exist, tell ok to the client and allow the connection.
         socket.writeMsg("OK")
         serverMsg = "$nick connected to the server."
         server.broadcast(serverMsg, nick)
 
-        // Forward messages until we get a null.
+        // Forward messages until we get a null. This means, the client closes the window.
         clientMsg = socket.readMsg()
         while (clientMsg != null) {
             serverMsg = "[$nick] $clientMsg"
@@ -29,7 +30,7 @@ class ClientThread(private var server: ChatServer, private var socket: MySocket)
             clientMsg = socket.readMsg()
         }
 
-        // Remove a user that exited the server
+        // Remove a user that exited the server.
         server.removeUser(nick, this)
         socket.close()
         serverMsg = "$nick exited the server."

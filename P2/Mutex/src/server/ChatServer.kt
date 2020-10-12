@@ -9,6 +9,7 @@ class ChatServer(private var port: Int) {
     private var users = HashMap<String, MySocket>()
     private var threads = HashSet<ClientThread>()
 
+    /* Method to run the chat server. */
     fun runServer() {
         val ss: MyServerSocket
         try {
@@ -22,11 +23,13 @@ class ChatServer(private var port: Int) {
         while (true) {
             val socket: MySocket = ss.accept()
             val newClient = ClientThread(this, socket)
+            // Add a thread for every client. Maybe we should set a max number of clients.
             threads.add(newClient)
             newClient.start()
         }
     }
 
+    /* Method to forward a message to everybody except the sender. */
     fun broadcast(message: String, sender: String) {
         for (nick in users.keys) {
             if (nick != sender) {
@@ -36,7 +39,7 @@ class ChatServer(private var port: Int) {
         }
     }
 
-    // TODO: MUTEX
+    /* Synchronized method to add a new user to the HashMap. */
     @Synchronized fun addUser(nick: String, socket: MySocket): Boolean {
         if (!users.containsKey(nick)) {
             users[nick] = socket
@@ -45,11 +48,13 @@ class ChatServer(private var port: Int) {
         return false
     }
 
+    /* Synchronized method to remove a user from the HashMap. */
     @Synchronized fun removeUser(nick: String, thread: ClientThread) {
         if (users.remove(nick, users[nick] as MySocket)) threads.remove(thread)
     }
 }
 
+/* Main function to run the server. It takes a parameter "port". */
 fun main(args: Array<String>) {
     val port: Int
     try {
