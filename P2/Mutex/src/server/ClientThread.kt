@@ -2,7 +2,7 @@ package server
 
 import MySocket
 
-class ClientThread(var server: ChatServer, var socket: MySocket): Thread() {
+class ClientThread(private var server: ChatServer, private var socket: MySocket): Thread() {
     override fun run() {
         // Get the new user nickname.
         var clientMsg : String?

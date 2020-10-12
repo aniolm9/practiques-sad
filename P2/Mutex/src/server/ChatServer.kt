@@ -5,9 +5,9 @@ import java.io.IOException
 import java.lang.Exception
 import kotlin.system.exitProcess
 
-class ChatServer(var port: Int) {
-    var users = HashMap<String, MySocket>()
-    var threads = HashSet<ClientThread>()
+class ChatServer(private var port: Int) {
+    private var users = HashMap<String, MySocket>()
+    private var threads = HashSet<ClientThread>()
 
     fun runServer() {
         val ss: MyServerSocket

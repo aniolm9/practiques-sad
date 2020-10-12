@@ -5,7 +5,7 @@ import java.lang.Exception
 import kotlin.system.exitProcess
 
 class ChatClient(private val host: String, private val port: Int) {
-    lateinit var username: String
+    private lateinit var username: String
 
     fun runClient() {
         val socket: MySocket
