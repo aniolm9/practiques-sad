@@ -16,9 +16,12 @@ class ChatClient(private val host: String, private val port: Int) {
             println("Couldn't connect to the server.")
             exitProcess(1)
         }
-        print("Enter user name: ")
-        username = readLine().toString()
-        WriteThread(socket, username).start()
+        do {
+            print("Enter user name: ")
+            username = readLine().toString()
+            socket.writeMsg(username)
+        } while (socket.readMsg() != "OK")
+        WriteThread(socket).start()
         ReadThread(socket).start()
     }
 }

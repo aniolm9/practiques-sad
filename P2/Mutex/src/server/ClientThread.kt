@@ -7,14 +7,17 @@ class ClientThread(var server: ChatServer, var socket: MySocket): Thread() {
         // Get the new user nickname.
         var clientMsg : String?
         var serverMsg : String?
-        val nick = socket.readMsg()
+        var nick = socket.readMsg()
+        while (!server.addUser(nick.toString(), socket)) {
+            socket.writeMsg("Username already in use.")
+            nick = socket.readMsg()
+        }
         // This should not happen, but if it does we just close the socket and end the thread.
         if (nick == null) {
             socket.close()
             return
         }
-        // TODO: Check nick uniqueness.
-        server.addUser(nick, socket)
+        socket.writeMsg("OK")
         serverMsg = "$nick connected to the server."
         server.broadcast(serverMsg, nick)
 
