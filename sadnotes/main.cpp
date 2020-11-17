@@ -9,8 +9,11 @@ namespace fs = std::filesystem;
 
 #include <QApplication>
 
-int main(int argc, char *argv[])
-{
+/* Application main method.
+ * Checks the operating system.
+ * Generates a database and a dashboard.
+ */
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     /* Set the directory to store note files.
      * For now, we are only supporting Linux.

@@ -3,25 +3,23 @@
 #include "note.h"
 #include <iostream>
 
-Dashboard::Dashboard(QWidget *parent, Database *db): QMainWindow(parent), ui(new Ui::Dashboard)
-{
+Dashboard::Dashboard(QWidget *parent, Database *db): QMainWindow(parent), ui(new Ui::Dashboard) {
     ui->setupUi(this);
     this->database = db;
 }
 
-Dashboard::~Dashboard()
-{
+Dashboard::~Dashboard() {
     delete ui;
 }
 
-/* Actions and slots */
-void Dashboard::on_newNote_clicked()
-{
+/* Opens a window to create a new note. */
+void Dashboard::on_newNote_clicked() {
     Note *note = new Note(this);
     QObject::connect(note, &Note::save, this, &Dashboard::saveNote);
     note->show();
 }
 
+/* Slot that gets triggered when a notes needs to be saved. */
 int Dashboard::saveNote(int id, QString name, QString data) {
     qDebug() << "Save note";
     // New note => Insert.

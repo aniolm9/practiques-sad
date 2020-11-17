@@ -6,6 +6,7 @@ Database::Database(QString path) {
     this->mydb.setDatabaseName(path);
 }
 
+/* Opens a connection with the database. */
 bool Database::openConnection() {
     if(!this->mydb.open()) {
         qDebug() << ("Error opening database.");
@@ -18,6 +19,7 @@ bool Database::openConnection() {
     return true;
 }
 
+/* Inserts a new note to the DB and returns the assigned ID if successful. */
 int Database::insertNote(QString name, QString data) {
     QSqlQuery query;
     query.prepare("INSERT INTO notes (name, data) VALUES (:name, :data)");
@@ -31,6 +33,7 @@ int Database::insertNote(QString name, QString data) {
     return constants::SAVE_ERROR;
 }
 
+/* Updates an existing note and returns its ID if successful. */
 int Database::updateNote(int id, QString name, QString data) {
     QSqlQuery query;
     query.prepare("UPDATE notes SET name = :name, data = :data WHERE id = :id");
