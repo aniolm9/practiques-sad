@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <string>
+#include "constants.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Note; }
@@ -13,7 +14,7 @@ class Note : public QMainWindow
     Q_OBJECT
 
 public:
-    Note(QWidget *parent = nullptr, int id = -1);
+    Note(QWidget *parent = nullptr, int id = constants::NEW_ID);
     ~Note();
 
 private:
@@ -25,11 +26,9 @@ private slots:
     void on_closeNote_clicked();
     void on_textEdit_textChanged();
     void on_saveNote_clicked();
-
-
     void on_lineEdit_textEdited(const QString &arg1);
 
 signals:
-    bool save(int id, QString name, QString data);
+    int save(int id, QString name, QString data);
 };
 #endif // NOTE_H

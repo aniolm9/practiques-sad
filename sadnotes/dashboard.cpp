@@ -7,7 +7,6 @@ Dashboard::Dashboard(QWidget *parent, Database *db): QMainWindow(parent), ui(new
 {
     ui->setupUi(this);
     this->database = db;
-
 }
 
 Dashboard::~Dashboard()
@@ -23,10 +22,10 @@ void Dashboard::on_newNote_clicked()
     note->show();
 }
 
-bool Dashboard::saveNote(int id, QString name, QString data) {
+int Dashboard::saveNote(int id, QString name, QString data) {
     qDebug() << "Save note";
     // New note => Insert.
-    if (id == -1) {
+    if (id == constants::NEW_ID) {
         return this->database->insertNote(name, data);
     }
     // Already existing note => Update.

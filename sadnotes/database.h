@@ -10,8 +10,8 @@ class Database {
         Database(QString path);
         bool openConnection();
         bool closeConnection();
-        bool insertNote(QString name, QString data);
-        bool updateNote(int id, QString name, QString data);
+        int insertNote(QString name, QString data);
+        int updateNote(int id, QString name, QString data);
     private:
         QSqlDatabase mydb;
 };

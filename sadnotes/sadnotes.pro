@@ -16,6 +16,7 @@ SOURCES += \
     note.cpp
 
 HEADERS += \
+    constants.h \
     dashboard.h \
     database.h \
     dialog.h \

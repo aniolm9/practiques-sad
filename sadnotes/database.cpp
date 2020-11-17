@@ -1,4 +1,5 @@
 #include "database.h"
+#include "constants.h"
 
 Database::Database(QString path) {
     this->mydb = QSqlDatabase::addDatabase("QSQLITE");
@@ -17,19 +18,27 @@ bool Database::openConnection() {
     return true;
 }
 
-bool Database::insertNote(QString name, QString data) {
+int Database::insertNote(QString name, QString data) {
     QSqlQuery query;
     query.prepare("INSERT INTO notes (name, data) VALUES (:name, :data)");
     query.bindValue(":name", name);
     query.bindValue(":data", data);
-    return query.exec();
+    if (query.exec()) {
+        query.exec("SELECT id FROM notes ORDER BY ID DESC LIMIT 1");
+        query.first();
+        return query.value(0).toInt();
+    }
+    return constants::SAVE_ERROR;
 }
 
-bool Database::updateNote(int id, QString name, QString data) {
+int Database::updateNote(int id, QString name, QString data) {
     QSqlQuery query;
     query.prepare("UPDATE notes SET name = :name, data = :data WHERE id = :id");
     query.bindValue(":name", name);
     query.bindValue(":data", data);
     query.bindValue(":id", id);
-    return query.exec();
+    if (query.exec()) {
+        return id;
+    }
+    return constants::SAVE_ERROR;
 }

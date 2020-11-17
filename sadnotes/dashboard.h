@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "database.h"
 #include "dialog.h"
+#include "constants.h"
 #include <string>
 
 QT_BEGIN_NAMESPACE
@@ -23,7 +24,7 @@ private:
     Database *database;
 
 public slots:
-    bool saveNote(int id, QString name, QString data);
+    int saveNote(int id, QString name, QString data);
 
 private slots:
     void on_newNote_clicked();

@@ -29,6 +29,7 @@ void Note::on_closeNote_clicked()
           case QMessageBox::Save:
               // Save was clicked
               on_saveNote_clicked();
+              this->close();
               break;
           case QMessageBox::Discard:
               // Don't Save was clicked
@@ -54,10 +55,21 @@ void Note::on_saveNote_clicked()
     // Send signal to dashboard.
     QString name = this->ui->lineEdit->text();
     QString data = this->ui->textEdit->toPlainText();
-    this->saved = emit save(this->id, name, data);
-    this->ui->saveNote->setDisabled(this->saved);
+    int result = emit save(this->id, name, data);
+    if (result != constants::SAVE_ERROR) {
+        this->id = result;
+        this->saved = true;
+        this->ui->saveNote->setDisabled(this->saved);
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("Fatal error.");
+        msgBox.setInformativeText("The database is corrupted.");
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.setDefaultButton(QMessageBox::Close);
+        msgBox.exec();
+        QCoreApplication::quit();
+    }
 }
-
 
 void Note::on_lineEdit_textEdited(const QString &arg1)
 {
