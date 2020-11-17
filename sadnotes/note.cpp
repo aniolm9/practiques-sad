@@ -63,5 +63,5 @@ void Note::on_lineEdit_textEdited(const QString &arg1)
 {
     this->saved = false;
     this->ui->saveNote->setDisabled(this->saved);
-    (void)arg1; // STFU
+    Q_UNUSED(arg1); // STFU
 }
