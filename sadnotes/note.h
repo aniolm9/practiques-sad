@@ -13,15 +13,23 @@ class Note : public QMainWindow
     Q_OBJECT
 
 public:
-    Note(QWidget *parent = nullptr, std::string notesPath = "");
+    Note(QWidget *parent = nullptr, int id = -1);
     ~Note();
-
-private slots:
-    void on_closeNote_clicked();
 
 private:
     Ui::Note *ui;
-    QString currentNote;
-    std::string notesPath;
+    bool saved = true;
+    int id;
+
+private slots:
+    void on_closeNote_clicked();
+    void on_textEdit_textChanged();
+    void on_saveNote_clicked();
+
+
+    void on_lineEdit_textEdited(const QString &arg1);
+
+signals:
+    bool save(int id, QString name, QString data);
 };
 #endif // NOTE_H

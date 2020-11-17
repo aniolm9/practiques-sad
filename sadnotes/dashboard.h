@@ -2,6 +2,8 @@
 #define DASHBOARD_H
 
 #include <QMainWindow>
+#include "database.h"
+#include "dialog.h"
 #include <string>
 
 QT_BEGIN_NAMESPACE
@@ -13,14 +15,18 @@ class Dashboard : public QMainWindow
     Q_OBJECT
 
 public:
-    Dashboard(QWidget *parent = nullptr, std::string notesPath = "");
+    Dashboard(QWidget *parent = nullptr, Database *db = nullptr);
     ~Dashboard();
+
+private:
+    Ui::Dashboard *ui;
+    Database *database;
+
+public slots:
+    bool saveNote(int id, QString name, QString data);
 
 private slots:
     void on_newNote_clicked();
 
-private:
-    Ui::Dashboard *ui;
-    std::string notesPath;
 };
 #endif // DASHBOARD_H
