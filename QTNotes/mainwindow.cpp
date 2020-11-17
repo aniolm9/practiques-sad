@@ -40,34 +40,37 @@ void MainWindow::on_actionOpen_triggered() // Ara demana el nom de la nota a obr
     QString text="";
     QString nom = QInputDialog::getText(0, "Input dialog","Nom de l'arxiu:", QLineEdit::Normal,"");
 
-
-    int i=0;
     if(!this->obrirConnexio()){
         qDebug()<<"No s'ha pogut obrir base de dades";
         return;
     }
     this->obrirConnexio();
     QSqlQuery query;
+    QSqlQuery query2;
+    bool a=false;
     query.prepare("select * from notes where id='"+nom+"'");
     if(query.exec()){
         int comptador=0;
         while(query.next()){
             comptador++;
         }
-        if(comptador>=1){
-            query.exec("select note from notes where id='"+nom+"'");
-            text += query.value(i).toString(); // encara no funciona
-            this->tancarConnexio();
-            ui->lineEdit->setText(nom);
-            ui->textEdit->setText(text);
 
+        if(comptador>=1){
+            a=true;
         }
         if(comptador<1){
             QMessageBox::warning(this,"Warning","No s'ha pogut obrir la nota");
         }
     }
-
-
+    if (a==true){
+        QSqlQueryModel* model = new QSqlQueryModel(this);
+        model->setQuery("select * from notes");
+        //text = model->data(model->index(2,2)).toString();
+        text=model->record(0).value("note").toString();
+        ui->lineEdit->setText(nom);
+        ui->textEdit->setText(text);
+    }
+    this->tancarConnexio();
 }
 
 
@@ -184,5 +187,22 @@ void MainWindow::on_actionDelete_triggered()
     }
     else{
         QMessageBox::warning(this,"error:",query.lastError().text());
+        this->tancarConnexio();
     }
+
+}
+
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    if(!this->obrirConnexio()){
+        qDebug()<<"No s'ha pogut obrir base de dades";
+        return;
+    }
+    QSqlQueryModel* model = new QSqlQueryModel(this);
+    model->setQuery("select * from notes");
+    ui->tableView->setModel(model);
+    this->tancarConnexio();
+
 }
