@@ -64,6 +64,9 @@ private slots:
 
     void on_actionDelete_triggered();
 
+
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
