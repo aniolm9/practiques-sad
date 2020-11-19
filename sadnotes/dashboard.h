@@ -2,6 +2,7 @@
 #define DASHBOARD_H
 
 #include <QMainWindow>
+#include <QTextBrowser>
 #include "database.h"
 #include "dialog.h"
 #include "constants.h"
@@ -23,6 +24,7 @@ class Dashboard : public QMainWindow {
     private:
         Ui::Dashboard *ui;
         Database *database;
+        void updateView();
 
     public slots:
         int saveNote(int id, QString name, QString data);

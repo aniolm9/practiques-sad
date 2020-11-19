@@ -1,7 +1,7 @@
 #include "database.h"
 #include "constants.h"
 
-Database::Database(QString path) {
+Database::Database(QString path): QObject() {
     this->mydb = QSqlDatabase::addDatabase("QSQLITE");
     this->mydb.setDatabaseName(path);
 }

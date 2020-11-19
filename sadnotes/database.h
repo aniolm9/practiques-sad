@@ -5,7 +5,15 @@
 #include <QtSql>
 #include <QSqlQuery>
 
-class Database {
+QT_BEGIN_NAMESPACE
+namespace Ui {
+    class Database;
+}
+QT_END_NAMESPACE
+
+class Database: public QObject {
+    Q_OBJECT;
+
     public:
         Database(QString path);
         bool openConnection();
@@ -15,6 +23,7 @@ class Database {
 
     private:
         QSqlDatabase mydb;
+
 };
 
 #endif // DATABASE_H
