@@ -12,7 +12,7 @@ namespace Ui {
 QT_END_NAMESPACE
 
 class Database: public QObject {
-    Q_OBJECT;
+    Q_OBJECT
 
     public:
         Database(QString path);

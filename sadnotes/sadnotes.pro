@@ -13,7 +13,8 @@ SOURCES += \
     dialog.cpp \
     main.cpp \
     dashboard.cpp \
-    note.cpp
+    note.cpp \
+    smallnote.cpp
 
 HEADERS += \
     constants.h \
@@ -21,7 +22,8 @@ HEADERS += \
     database.h \
     dialog.h \
     note.h \
-    platform.h
+    platform.h \
+    smallnote.h
 
 FORMS += \
     dashboard.ui \

@@ -5,7 +5,9 @@
 #include <QTextBrowser>
 #include "database.h"
 #include "dialog.h"
+#include "note.h"
 #include "constants.h"
+#include "smallnote.h"
 #include <string>
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +26,7 @@ class Dashboard : public QMainWindow {
     private:
         Ui::Dashboard *ui;
         Database *database;
+        QVector<SmallNote*> sns;
         void updateView();
 
     public slots:
@@ -31,5 +34,6 @@ class Dashboard : public QMainWindow {
 
     private slots:
         void on_newNote_clicked();
+        void on_saveAll_clicked();
 };
 #endif // DASHBOARD_H

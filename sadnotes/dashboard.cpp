@@ -1,6 +1,5 @@
 #include "dashboard.h"
 #include "ui_dashboard.h"
-#include "note.h"
 #include <iostream>
 
 Dashboard::Dashboard(QWidget *parent, Database *db): QMainWindow(parent), ui(new Ui::Dashboard) {
@@ -40,17 +39,30 @@ int Dashboard::saveNote(int id, QString name, QString data) {
 void Dashboard::updateView() {
     qDebug() << "Updating view";
     QSqlQuery query;
-    if (query.exec("SELECT * FROM notes")) {
-        /* Clean current layout */
-        QLayoutItem *child;
-        while ((child = this->ui->scrollAreaWidgetContents->layout()->takeAt(0)) != 0) {
-            delete child->widget();
-            delete child;
+    if (query.exec("SELECT * FROM notes ORDER BY id DESC")) {
+        /* Clean current layout to avoid memory leaks */
+        for (int i = 0; i < this->sns.size(); i++) {
+            delete this->sns.at(i);
         }
+        this->sns.clear();
+        /* Update layout with all the notes in the database */
         while(query.next()) {
-            QTextBrowser *text = new QTextBrowser();
-            text->append(query.value(2).toString());
-            this->ui->scrollAreaWidgetContents->layout()->addWidget(text);
+            SmallNote *sn = new SmallNote(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString());
+            this->sns.append(sn);
+            this->ui->scrollAreaWidgetContents->layout()->addWidget(sn->getText());
         }
     }
+}
+
+/* Allows saving the notes without having to open them in a new window. */
+void Dashboard::on_saveAll_clicked() {
+    qDebug() << "Saving";
+    for (int i = 0; i < this->sns.size(); i++) {
+        if (sns.at(i)->getStatus()) {
+            qDebug() << "Saving " << i;
+            this->database->updateNote(sns.at(i)->getId(), sns.at(i)->getName(), sns.at(i)->getData());
+            sns.at(i)->setStatus(false);
+        }
+    }
+    qDebug() << "Saved";
 }
