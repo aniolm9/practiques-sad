@@ -2,11 +2,6 @@
 #include "dashboard.h"
 #include "dialog.h"
 #include "database.h"
-#include <filesystem>
-#include <string>
-
-namespace fs = std::filesystem;
-
 #include <QApplication>
 
 /* Application main method.
@@ -19,12 +14,12 @@ int main(int argc, char *argv[]) {
      * For now, we are only supporting Linux.
      * TODO: Add Windows and Mac support.
      */
-    fs::path localPath;
-    std::string database = "sadnotes.db";
+    QString localPath;
+    QString database = "sadnotes.db";
     if(strcmp(PLATFORM_NAME, "linux") == 0) {
-        localPath = fs::path((std::string)getenv("HOME") + "/.local/share/sadnotes/" + database);
+        localPath = QString::fromStdString(getenv("HOME")) + "/.local/share/sadnotes/" ;
     } else if (strcmp(PLATFORM_NAME, "windows") == 0) {
-        localPath = fs::path((std::string)"C:/Users/" + (std::string)qgetenv("USERNAME") + "/AppData/Local/" + database);
+        localPath = QString::fromStdString("C:/Users/") + qgetenv("USERNAME") + "/AppData/Local/";
     } else if (strcmp(PLATFORM_NAME, "osx") == 0) {
         // TODO
     } else {
@@ -35,11 +30,12 @@ int main(int argc, char *argv[]) {
         return a.exec();
     }
     /* Create the parent directory if it does not exist */
-    if(!fs::exists(localPath.parent_path())) {
-        fs::create_directories(localPath.parent_path());
+    if(!QFile::exists(localPath)) {
+        QDir().mkdir(localPath);
     }
+    localPath = localPath + database;
     /* Connect to database */
-    Database *db = new Database(QString::fromStdString(localPath));
+    Database *db = new Database(localPath);
     if (!db->openConnection()) {
         Dialog dialog;
         dialog.setLabel("Couldn't connect to database.");
