@@ -21,5 +21,6 @@ Implementació
     
 
 Problemes trobats 
--Llibreria filesystem dona problemes sobretot al executar amb Windows
+-Llibreria filesystem dóna problemes sobretot al executar amb Windows
 -Llibreria Focus per localitzar on està el cursor i obrir la nota en qüestió amb el botó open
+
