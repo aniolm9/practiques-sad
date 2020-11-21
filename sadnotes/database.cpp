@@ -1,6 +1,7 @@
 #include "database.h"
 #include "constants.h"
 
+/* Class constructor. */
 Database::Database(QString path): QObject() {
     this->mydb = QSqlDatabase::addDatabase("QSQLITE");
     this->mydb.setDatabaseName(path);
@@ -46,6 +47,7 @@ int Database::updateNote(int id, QString name, QString data) {
     return constants::SAVE_ERROR;
 }
 
+/* Deletes a note from the database, by id. */
 int Database::deleteNote(int id) {
     QSqlQuery query;
     query.prepare("DELETE FROM notes WHERE id = :id");

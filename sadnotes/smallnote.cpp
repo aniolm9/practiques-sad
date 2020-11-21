@@ -1,6 +1,7 @@
 #include "smallnote.h"
 #include <QDebug>
 
+/* Class constructor. */
 SmallNote::SmallNote(int id, QString name, QString data): QObject() {
     this->id = id;
     this->name = name;
@@ -13,6 +14,7 @@ SmallNote::SmallNote(int id, QString name, QString data): QObject() {
     QObject::connect(this->view, &QTextEdit::textChanged, this, &SmallNote::on_view_textChanged);
 }
 
+/* Class destructor. */
 SmallNote::~SmallNote() {
     delete this->view;
 }
@@ -41,7 +43,9 @@ void SmallNote::setStatus(bool status) {
     this->updated = status;
 }
 
+
 /* Slots. */
+/* If the text of a note is updated, we save it to the class properties. */
 void SmallNote::on_view_textChanged() {
     QStringList lines = this->view->toPlainText().split('\n', QString::SkipEmptyParts);
     this->name = lines.at(0);

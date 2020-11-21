@@ -2,6 +2,7 @@
 #define NOTE_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 #include <string>
 #include "constants.h"
 
@@ -22,6 +23,7 @@ class Note : public QMainWindow {
         Ui::Note *ui;
         bool saved = true;
         int id;
+        void closeEvent(QCloseEvent *event);
 
     private slots:
         void on_closeNote_clicked();
@@ -31,5 +33,6 @@ class Note : public QMainWindow {
 
     signals:
         int save(int id, QString name, QString data);
+        void giveFocus();
 };
 #endif // NOTE_H
