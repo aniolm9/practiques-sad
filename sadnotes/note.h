@@ -16,7 +16,7 @@ class Note : public QMainWindow {
     Q_OBJECT
 
     public:
-        Note(QWidget *parent = nullptr, int id = constants::NEW_ID);
+        Note(QWidget *parent = nullptr, int id = constants::NEW_ID, QString name = "", QString data = "");
         ~Note();
 
     private:

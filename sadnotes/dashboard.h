@@ -27,6 +27,7 @@ class Dashboard : public QMainWindow {
         Database *database;
         QVector<SmallNote*> sns;
         void updateView();
+        void createNote(int id = constants::NEW_ID, QString name = "", QString data = "");
 
     public slots:
         int saveNote(int id, QString name, QString data);
@@ -37,5 +38,6 @@ class Dashboard : public QMainWindow {
         void on_newNote_clicked();
         void on_saveAll_clicked();
         void on_remove_clicked();
+        void on_open_clicked();
 };
 #endif // DASHBOARD_H

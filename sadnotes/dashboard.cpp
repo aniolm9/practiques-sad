@@ -21,17 +21,13 @@ Dashboard::~Dashboard() {
  * Disables the window until the note window is closed.
 */
 void Dashboard::on_newNote_clicked() {
-    Note *note = new Note(this);
-    QObject::connect(note, &Note::save, this, &Dashboard::saveNote);
-    QObject::connect(note, &Note::giveFocus, this, &Dashboard::recoverFocus);
-    this->ui->centralwidget->setDisabled(true);
-    note->show();
+    this->createNote();
 }
 
 /* Remove the selected note from the database. */
 void Dashboard::on_remove_clicked() {
     qDebug() << this->lastFocused;
-    /* If the last focus before clicking to remove, we remove it */
+    /* If the last focus before clicking to remove was a note, we remove it */
     if (dynamic_cast<QTextEdit*>(this->lastFocused)) {
         QMutableVectorIterator<SmallNote*> it(this->sns);
         while (it.hasNext()) {
@@ -61,6 +57,20 @@ void Dashboard::on_saveAll_clicked() {
         }
     }
     qDebug() << "Saved";
+}
+
+/* Opens a note in a new window. */
+void Dashboard::on_open_clicked() {
+    /* If the last focus before clicking to open was a note, we open it */
+    if (dynamic_cast<QTextEdit*>(this->lastFocused)) {
+        QMutableVectorIterator<SmallNote*> it(this->sns);
+        while (it.hasNext()) {
+            SmallNote *tmpNote = it.next();
+            if (tmpNote->getText() == this->lastFocused) {
+                this->createNote(tmpNote->getId(), tmpNote->getName(), tmpNote->getData());
+            }
+        }
+    }
 }
 
 /* Slot that gets triggered when a note needs to be saved.
@@ -117,4 +127,20 @@ void Dashboard::updateView() {
             this->ui->scrollAreaWidgetContents->layout()->addWidget(sn->getText());
         }
     }
+}
+
+/* Create a new window with a note.
+ * It can open existing notes or create new ones
+ */
+void Dashboard::createNote(int id, QString name, QString data) {
+    Note *note;
+    if (id != constants::NEW_ID) {
+        note = new Note(this, id, name, data);
+    } else {
+        note = new Note(this);
+    }
+    QObject::connect(note, &Note::save, this, &Dashboard::saveNote);
+    QObject::connect(note, &Note::giveFocus, this, &Dashboard::recoverFocus);
+    this->ui->centralwidget->setDisabled(true);
+    note->show();
 }

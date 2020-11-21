@@ -1,12 +1,15 @@
 #include "note.h"
 #include "ui_note.h"
 #include <QMessageBox>
+#include <QDebug>
 
 /* Class constructor. */
-Note::Note(QWidget *parent, int id): QMainWindow(parent), ui(new Ui::Note) {
+Note::Note(QWidget *parent, int id, QString name, QString data): QMainWindow(parent), ui(new Ui::Note) {
     ui->setupUi(this);
-    //setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
     this->id = id;
+    this->ui->lineEdit->setText(name);
+    this->ui->textEdit->setText(data);
+    this->saved = true;
     this->ui->saveNote->setDisabled(this->saved);
     this->ui->lineEdit->setFocus();
 }
