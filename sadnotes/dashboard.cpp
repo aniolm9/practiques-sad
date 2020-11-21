@@ -61,7 +61,10 @@ void Dashboard::on_saveAll_clicked() {
         if (sns.at(i)->getStatus()) {
             qDebug() << "Saving " << i;
             this->database->updateNote(sns.at(i)->getId(), sns.at(i)->getName(), sns.at(i)->getData());
-            sns.at(i)->setStatus(false); // Here I prefer a direct method call than a signal/slot.
+            /* Here I prefer a direct method call than a signal/slot.
+             * It is faster and cleaner.
+             */
+            sns.at(i)->setStatus(false);
         }
     }
     qDebug() << "Saved";

@@ -19,12 +19,12 @@ int main(int argc, char *argv[]) {
      * For now, we are only supporting Linux.
      * TODO: Add Windows and Mac support.
      */
-    fs::path localPath;
+    fs::path localPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
     std::string database = "sadnotes.db";
-    if(strcmp(PLATFORM_NAME, "linux") == 0) {
-        localPath = fs::path((std::string)getenv("HOME") + "/.local/share/sadnotes/" + database);
-    } else if (strcmp(PLATFORM_NAME, "windows") == 0) {
-        // TODO
+    if(strcmp(PLATFORM_NAME, "linux") == 0 && localPath.string().find(".local") != std::string::npos) {
+        localPath = fs::path(localPath.string() + "/" + database);
+    } else if (strcmp(PLATFORM_NAME, "windows") == 0 && localPath.string().find("AppData") != std::string::npos) {
+        localPath = fs::path(localPath.string() + "/" + database);
     } else if (strcmp(PLATFORM_NAME, "osx") == 0) {
         // TODO
     } else {
