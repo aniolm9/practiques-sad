@@ -20,6 +20,7 @@ class Database: public QObject {
         bool closeConnection();
         int insertNote(QString name, QString data);
         int updateNote(int id, QString name, QString data);
+        int deleteNote(int id);
 
     private:
         QSqlDatabase mydb;

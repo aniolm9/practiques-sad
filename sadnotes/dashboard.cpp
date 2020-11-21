@@ -5,6 +5,8 @@
 Dashboard::Dashboard(QWidget *parent, Database *db): QMainWindow(parent), ui(new Ui::Dashboard) {
     ui->setupUi(this);
     this->database = db;
+    this->ui->remove->setDisabled(true);
+    this->ui->open->setDisabled(true);
     this->updateView();
 }
 
@@ -68,4 +70,30 @@ void Dashboard::on_saveAll_clicked() {
         }
     }
     qDebug() << "Saved";
+}
+
+void Dashboard::setLastFocus(QWidget *old, QWidget *now) {
+    if (old == nullptr || now == nullptr) return;
+    this->lastFocused = old;
+    bool isText = !(now->objectName() =="view" || now->objectName() == "remove" || now->objectName() == "open");
+    this->ui->remove->setDisabled(isText);
+    this->ui->open->setDisabled(isText);
+}
+
+void Dashboard::on_remove_clicked() {
+    qDebug() << this->lastFocused;
+    /* If the last focus before clicking to remove, we remove it */
+    if (dynamic_cast<QTextEdit*>(this->lastFocused)) {
+        QMutableVectorIterator<SmallNote*> it(this->sns);
+        while (it.hasNext()) {
+            SmallNote *tmpNote = it.next();
+            if (tmpNote->getText() == this->lastFocused) {
+                this->database->deleteNote(tmpNote->getId());
+                it.remove();
+                delete tmpNote;
+            }
+        }
+        this->ui->remove->setDisabled(true);
+        this->ui->open->setDisabled(true);
+    }
 }

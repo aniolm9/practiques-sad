@@ -56,6 +56,12 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>saveNote</tabstop>
+  <tabstop>closeNote</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

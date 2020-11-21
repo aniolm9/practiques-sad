@@ -45,3 +45,13 @@ int Database::updateNote(int id, QString name, QString data) {
     }
     return constants::SAVE_ERROR;
 }
+
+int Database::deleteNote(int id) {
+    QSqlQuery query;
+    query.prepare("DELETE FROM notes WHERE id = :id");
+    query.bindValue(":id", id);
+    if (query.exec()) {
+        return id;
+    }
+    return constants::SAVE_ERROR;
+}

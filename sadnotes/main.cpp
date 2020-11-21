@@ -16,10 +16,10 @@ int main(int argc, char *argv[]) {
      */
     QString localPath;
     QString database = "sadnotes.db";
-    if(strcmp(PLATFORM_NAME, "linux") == 0) {
-        localPath = QString::fromStdString(getenv("HOME")) + "/.local/share/sadnotes/" ;
+    if (strcmp(PLATFORM_NAME, "linux") == 0) {
+        localPath = qgetenv("HOME") + "/.local/share/sadnotes/" ;
     } else if (strcmp(PLATFORM_NAME, "windows") == 0) {
-        localPath = QString::fromStdString("C:/Users/") + qgetenv("USERNAME") + "/AppData/Local/";
+        localPath = "C:/Users/" + qgetenv("USERNAME") + "/AppData/Local/";
     } else if (strcmp(PLATFORM_NAME, "osx") == 0) {
         // TODO
     } else {
@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
     }
     /* Show the main window */
     Dashboard w = Dashboard(nullptr, db);
+    QObject::connect(&a, &QApplication::focusChanged, &w, &Dashboard::setLastFocus);
     w.show();
     return a.exec();
 }

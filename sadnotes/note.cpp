@@ -6,6 +6,7 @@ Note::Note(QWidget *parent, int id): QMainWindow(parent), ui(new Ui::Note) {
     ui->setupUi(this);
     this->id = id;
     this->ui->saveNote->setDisabled(this->saved);
+    this->ui->lineEdit->setFocus();
 }
 
 Note::~Note() {

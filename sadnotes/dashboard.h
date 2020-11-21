@@ -24,6 +24,7 @@ class Dashboard : public QMainWindow {
         ~Dashboard();
 
     private:
+        QObject *lastFocused;
         Ui::Dashboard *ui;
         Database *database;
         QVector<SmallNote*> sns;
@@ -31,9 +32,11 @@ class Dashboard : public QMainWindow {
 
     public slots:
         int saveNote(int id, QString name, QString data);
+        void setLastFocus(QWidget *old, QWidget *now);
 
     private slots:
         void on_newNote_clicked();
         void on_saveAll_clicked();
+        void on_remove_clicked();
 };
 #endif // DASHBOARD_H
