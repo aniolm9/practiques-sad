@@ -2,6 +2,11 @@
 #include "dashboard.h"
 #include "dialog.h"
 #include "database.h"
+//#include <filesystem>
+#include <string>
+
+//namespace fs = std::filesystem
+
 #include <QApplication>
 
 /* Application main method.
@@ -17,7 +22,7 @@ int main(int argc, char *argv[]) {
     QString localPath;
     QString database = "sadnotes.db";
     if(strcmp(PLATFORM_NAME, "linux") == 0) {
-        localPath = QString::fromStdString(getenv("HOME")) + "/.local/share/sadnotes/" ;
+         localPath = QString::fromStdString(getenv("HOME")) + "/.local/share/sadnotes/" ;
     } else if (strcmp(PLATFORM_NAME, "windows") == 0) {
         localPath = QString::fromStdString("C:/Users/") + qgetenv("USERNAME") + "/AppData/Local/";
     } else if (strcmp(PLATFORM_NAME, "osx") == 0) {
@@ -31,10 +36,10 @@ int main(int argc, char *argv[]) {
     }
     /* Create the parent directory if it does not exist */
     if(!QFile::exists(localPath)) {
-        QDir().mkdir(localPath);
-    }
-    localPath = localPath + database;
+           QDir().mkdir(localPath);
+       }
     /* Connect to database */
+    localPath = localPath+database;
     Database *db = new Database(localPath);
     if (!db->openConnection()) {
         Dialog dialog;

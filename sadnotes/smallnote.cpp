@@ -5,7 +5,6 @@ SmallNote::SmallNote(int id, QString name, QString data): QObject() {
     this->id = id;
     this->name = name;
     this->data = data;
-    /* QTextEdit field to be displayed in dashboard */
     this->view = new QTextEdit();
     this->view->setObjectName("view");
     this->view->append("<html><b>" + name + "</b></html>");
@@ -17,7 +16,6 @@ SmallNote::~SmallNote() {
     delete this->view;
 }
 
-/* Getters and setters. */
 int SmallNote::getId() {
     return this->id;
 }
@@ -41,7 +39,6 @@ void SmallNote::setStatus(bool status) {
     this->updated = status;
 }
 
-/* Slots. */
 void SmallNote::on_view_textChanged() {
     QStringList lines = this->view->toPlainText().split('\n', QString::SkipEmptyParts);
     this->name = lines.at(0);
