@@ -1,0 +1,26 @@
+Explicació funcionalitat
+-Bloc de notes ...
+
+Eines emprades
+-QT amb C++
+-Qt Documentation Archives
+-GitHub
+-Youtube 😂
+
+Implementació
+-Dos programes esborrany:
+  -Qnotes:
+    -Inicialment creava i guardava notes com a arxius de text a una ubicació determinada de l'ordinador,
+    més endevant utilitzant una base de dades
+    -Botons amb idiverses funcionalitats (amb icones) , desar, obrir, copiar, pegar i tancar
+  -Sadnotes:
+    -Estructura de dashboard i nota que s'obre per separat
+    -Vam decidir juntar als dos projectes a sadnotes
+    -Explicar les diferents classes 
+    
+    
+
+Problemes trobats 
+-Llibreria filesystem dóna problemes sobretot al executar amb Windows
+-Llibreria Focus per localitzar on està el cursor i obrir la nota en qüestió amb el botó open
+

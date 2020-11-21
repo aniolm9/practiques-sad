@@ -10,12 +10,13 @@
  */
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    /* Set the directory to store note files.
-     * For now, we are only supporting Linux.
-     * TODO: Add Windows and Mac support.
-     */
     QString localPath;
     QString database = "sadnotes.db";
+
+    /* Set the directory to store note files.
+     * For now, we are only supporting Linux and Windows.
+     * TODO: Add Mac support.
+     */
     if (strcmp(PLATFORM_NAME, "linux") == 0) {
         localPath = qgetenv("HOME") + "/.local/share/sadnotes/" ;
     } else if (strcmp(PLATFORM_NAME, "windows") == 0) {
@@ -33,8 +34,8 @@ int main(int argc, char *argv[]) {
     if(!QFile::exists(localPath)) {
         QDir().mkdir(localPath);
     }
-    localPath = localPath + database;
     /* Connect to database */
+    localPath = localPath + database;
     Database *db = new Database(localPath);
     if (!db->openConnection()) {
         Dialog dialog;
