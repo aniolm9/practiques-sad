@@ -1,0 +1,8 @@
+Explicació funcionalitat
+-Bloc de notes ...
+Eines emprades
+-QT amb c++
+Problemes trobats 
+-Llibreria filesystem dona problemes sobretot al executar amb Windows
+
+Implementació
