@@ -62,14 +62,14 @@ void Dashboard::on_remove_clicked() {
 /* Allows saving the notes without having to open them in a new window. */
 void Dashboard::on_saveAll_clicked() {
     qDebug() << "Saving";
-    for (int i = 0; i < this->notes.size(); i++) {
-        if (notes.at(i)->getStatus()) {
-            qDebug() << "Saving " << i;
-            this->database->updateNote(notes.at(i)->getId(), notes.at(i)->getName(), notes.at(i)->getData());
+    for (auto curNote: this->notes) {
+        if (curNote->getStatus()) {
+            qDebug() << "Saving" << curNote;
+            this->database->updateNote(curNote->getId(), curNote->getName(), curNote->getData());
             /* Here I prefer a direct method call than a signal/slot.
              * It is faster and cleaner.
              */
-            notes.at(i)->setStatus(false);
+            curNote->setStatus(false);
         }
     }
     qDebug() << "Saved";
@@ -132,8 +132,8 @@ void Dashboard::updateView() {
     QSqlQuery query;
     if (query.exec("SELECT * FROM notes ORDER BY id DESC")) {
         /* Clean current layout to avoid memory leaks */
-        for (int i = 0; i < this->notes.size(); i++) {
-            delete this->notes.at(i);
+        for (auto curNote: this->notes) {
+            delete curNote;
         }
         this->notes.clear();
         /* Update layout with all the notes in the database */
