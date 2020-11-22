@@ -40,7 +40,7 @@ class Dashboard : public QMainWindow {
         QObject *lastFocused;
         Ui::Dashboard *ui;
         Database *database;
-        QVector<SmallNote*> sns;
+        QVector<SmallNote*> notes;
         void updateView();
         void createNote(int id = constants::NEW_ID, QString name = "", QString data = "");
 

@@ -45,7 +45,7 @@ void Dashboard::on_remove_clicked() {
     qDebug() << this->lastFocused;
     /* If the last focus before clicking to remove was a note, we remove it */
     if (dynamic_cast<QTextEdit*>(this->lastFocused)) {
-        QMutableVectorIterator<SmallNote*> it(this->sns);
+        QMutableVectorIterator<SmallNote*> it(this->notes);
         while (it.hasNext()) {
             SmallNote *tmpNote = it.next();
             if (tmpNote->getText() == this->lastFocused) {
@@ -62,14 +62,14 @@ void Dashboard::on_remove_clicked() {
 /* Allows saving the notes without having to open them in a new window. */
 void Dashboard::on_saveAll_clicked() {
     qDebug() << "Saving";
-    for (int i = 0; i < this->sns.size(); i++) {
-        if (sns.at(i)->getStatus()) {
+    for (int i = 0; i < this->notes.size(); i++) {
+        if (notes.at(i)->getStatus()) {
             qDebug() << "Saving " << i;
-            this->database->updateNote(sns.at(i)->getId(), sns.at(i)->getName(), sns.at(i)->getData());
+            this->database->updateNote(notes.at(i)->getId(), notes.at(i)->getName(), notes.at(i)->getData());
             /* Here I prefer a direct method call than a signal/slot.
              * It is faster and cleaner.
              */
-            sns.at(i)->setStatus(false);
+            notes.at(i)->setStatus(false);
         }
     }
     qDebug() << "Saved";
@@ -79,7 +79,7 @@ void Dashboard::on_saveAll_clicked() {
 void Dashboard::on_open_clicked() {
     /* If the last focus before clicking to open was a note, we open it */
     if (dynamic_cast<QTextEdit*>(this->lastFocused)) {
-        QMutableVectorIterator<SmallNote*> it(this->sns);
+        QMutableVectorIterator<SmallNote*> it(this->notes);
         while (it.hasNext()) {
             SmallNote *tmpNote = it.next();
             if (tmpNote->getText() == this->lastFocused) {
@@ -132,14 +132,14 @@ void Dashboard::updateView() {
     QSqlQuery query;
     if (query.exec("SELECT * FROM notes ORDER BY id DESC")) {
         /* Clean current layout to avoid memory leaks */
-        for (int i = 0; i < this->sns.size(); i++) {
-            delete this->sns.at(i);
+        for (int i = 0; i < this->notes.size(); i++) {
+            delete this->notes.at(i);
         }
-        this->sns.clear();
+        this->notes.clear();
         /* Update layout with all the notes in the database */
         while(query.next()) {
             SmallNote *sn = new SmallNote(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString());
-            this->sns.append(sn);
+            this->notes.append(sn);
             this->ui->scrollAreaWidgetContents->layout()->addWidget(sn->getText());
         }
     }
