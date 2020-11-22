@@ -21,6 +21,7 @@ Es va començar desenvolupant dos programes paral·lelament:
 ### Problemes trobats 
 * Biblioteca filesystem dona problemes sobretot al executar amb Windows. Es migra a full Qt.
 * Saber quin era l'últim element seleccionat (focus) abans de clicar a _Eliminar_ o a _Obrir_.
+* Saber a quina SmallNote pertany el QTextEdit guardat a lastFocus.
 
 ### Bibliografia
 * Qt Documentation
