@@ -47,6 +47,7 @@ bool SmallNote::getStatus() {
 QString SmallNote::getName() {
     return this->name;
 }
+
 QString SmallNote::getData() {
     return this->data;
 }
