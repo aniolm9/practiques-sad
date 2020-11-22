@@ -16,6 +16,7 @@
 
 #include "smallnote.h"
 #include <QDebug>
+#include <QTextBlock>
 
 /* Class constructor. */
 SmallNote::SmallNote(int id, QString name, QString data): QObject() {
@@ -73,5 +74,27 @@ void SmallNote::on_view_textChanged() {
         this->name = "";
         this->data = "";
     }
+    /* There is no clean way to ensure that the first line
+     * is bold and the others aren't. This solution iterates
+     * over all lines and sets the first one to bold. To do that,
+     * we need another loop that iterates the line.
+     */
+    int numBlocks = this->view->document()->blockCount();
+    this->view->blockSignals(true);
+    for (int i = 0; i < numBlocks; i++) {
+        QTextCursor cursor(this->view->document()->findBlockByNumber(i));
+        for (QTextBlock::iterator it = cursor.block().begin(); !(it.atEnd()); ++it) {
+            QTextCharFormat charFormat = it.fragment().charFormat();
+            QFont font = charFormat.font();
+            font.setBold(!i);
+            charFormat.setFont(font);
+
+            QTextCursor tempCursor = cursor;
+            tempCursor.setPosition(it.fragment().position());
+            tempCursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+            tempCursor.setCharFormat(charFormat);
+        }
+    }
+    this->view->blockSignals(false);
     this->updated = true;
 }
