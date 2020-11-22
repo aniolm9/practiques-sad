@@ -40,6 +40,9 @@
            <bold>false</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string>Add a new note</string>
+         </property>
          <property name="text">
           <string>🞤</string>
          </property>
@@ -73,6 +76,9 @@
            <bold>false</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string>Save all notes</string>
+         </property>
          <property name="text">
           <string>✓</string>
          </property>
@@ -93,6 +99,9 @@
            <bold>false</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string>Remove current note</string>
+         </property>
          <property name="text">
           <string>✗</string>
          </property>
@@ -112,6 +121,9 @@
            <weight>50</weight>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="toolTip">
+          <string>Open current note in a new window</string>
          </property>
          <property name="text">
           <string>➤</string>
