@@ -3,9 +3,8 @@
 
 #include <QMainWindow>
 #include "database.h"
-#include "dialog.h"
 #include "note.h"
-#include "constants.h"
+#include "include/constants.h"
 #include "smallnote.h"
 
 QT_BEGIN_NAMESPACE

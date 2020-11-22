@@ -10,31 +10,31 @@ CONFIG += c++17
 
 SOURCES += \
     database.cpp \
-    dialog.cpp \
     main.cpp \
     dashboard.cpp \
     note.cpp \
     smallnote.cpp
 
 HEADERS += \
-    constants.h \
+    include/constants.h \
     dashboard.h \
     database.h \
-    dialog.h \
     note.h \
-    platform.h \
+    include/platform.h \
     smallnote.h
 
 FORMS += \
-    dashboard.ui \
-    dialog.ui \
-    note.ui
+    ui/dashboard.ui \
+    ui/note.ui
 
 TRANSLATIONS += \
-    sadnotes_ca_ES.ts
+    resources/l10n/sadnotes_ca.ts
+
+RESOURCES += \
+    resources/resources.qrc
 
 RC_ICONS += \
-    dIcon.ico\
+    resources/dIcon.ico\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -27,8 +27,9 @@ Note::~Note() {
 void Note::closeEvent(QCloseEvent *event) {
     if (!this->saved) {
         QMessageBox msgBox;
-        msgBox.setText("The document has been modified.");
-        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setWindowTitle(tr("Note"));
+        msgBox.setText(tr("The document has been modified."));
+        msgBox.setInformativeText(tr("Do you want to save your changes?"));
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
         int ret = msgBox.exec();
@@ -77,8 +78,8 @@ void Note::on_saveNote_clicked() {
         this->ui->saveNote->setDisabled(this->saved);
     } else {
         QMessageBox msgBox;
-        msgBox.setText("Fatal error.");
-        msgBox.setInformativeText("The database is corrupted.");
+        msgBox.setWindowTitle(tr("Fatal error"));
+        msgBox.setText(tr("The database is corrupted."));
         msgBox.setStandardButtons(QMessageBox::Close);
         msgBox.setDefaultButton(QMessageBox::Close);
         msgBox.exec();

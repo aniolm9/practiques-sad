@@ -6,3 +6,4 @@
 build-sadnotes-Desktop-Debug/
 *.pro.user
 build-QTNotes-Desktop-Debug/
+.qmake.stash

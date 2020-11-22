@@ -1,5 +1,5 @@
 #include "database.h"
-#include "constants.h"
+#include "include/constants.h"
 
 /* Class constructor. */
 Database::Database(QString path): QObject() {
