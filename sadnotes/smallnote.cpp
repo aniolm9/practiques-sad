@@ -65,7 +65,7 @@ void SmallNote::setStatus(bool status) {
 /* Slots. */
 /* If the text of a note is updated, we save it to the class properties. */
 void SmallNote::on_view_textChanged() {
-    QStringList lines = this->view->toPlainText().split('\n', QString::SkipEmptyParts);
+    QStringList lines = this->view->toPlainText().split('\n', Qt::SkipEmptyParts);
     if (!lines.empty()) {
         this->name = lines.at(0);
         lines.removeAt(0);

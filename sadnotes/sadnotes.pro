@@ -34,7 +34,7 @@ RESOURCES += \
     resources/resources.qrc
 
 RC_ICONS += \
-    resources/dIcon.ico\
+    resources/icons/dIcon.ico\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
