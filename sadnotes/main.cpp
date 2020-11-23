@@ -28,6 +28,7 @@
  */
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    QIcon icon(":/icons/dIcon.ico");
     QTranslator qtTranslator;
     QTranslator sadNotesTranslator;
     QString localPath;
@@ -78,6 +79,7 @@ int main(int argc, char *argv[]) {
     /* Show the main window */
     Dashboard w = Dashboard(nullptr, db);
     QObject::connect(&a, &QApplication::focusChanged, &w, &Dashboard::setLastFocus);
+    a.setWindowIcon(icon);
     w.show();
     return a.exec();
 }
