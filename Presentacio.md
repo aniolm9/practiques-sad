@@ -1,3 +1,12 @@
+## Ordre de presentació
+* Explicació del projecte.
+  * Objectius.
+  * Disseny minimalista.
+* Eines emprades.
+* Demo Windows.
+* Demo Linux.
+* Arquitectura i implementació.
+
 ### Explicació funcionalitat
 * Bloc de notes ...
 
