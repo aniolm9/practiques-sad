@@ -105,7 +105,7 @@ int Dashboard::saveNote(int id, QString name, QString data) {
 
 /* Every time that a focusChange signal is emited, we capture it
  * and store the old value. It is needed to know which note has to be
- * opened or removed when pressin the button.
+ * opened or removed when pressing the button.
  */
 void Dashboard::setLastFocus(QWidget *old, QWidget *now) {
     if (old == nullptr || now == nullptr) return;
