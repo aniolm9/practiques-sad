@@ -51,8 +51,6 @@ int main(int argc, char *argv[]) {
         localPath = qgetenv("HOME") + "/.local/share/sadnotes/" ;
     } else if (strcmp(PLATFORM_NAME, "windows") == 0) {
         localPath = "C:/Users/" + qgetenv("USERNAME") + "/AppData/Local/";
-    } else if (strcmp(PLATFORM_NAME, "osx") == 0) {
-        // TODO
     } else {
         QMessageBox msgBox;
         msgBox.setWindowTitle(QObject::tr("Fatal error"));
