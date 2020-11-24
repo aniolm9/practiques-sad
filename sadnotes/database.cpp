@@ -26,10 +26,8 @@ Database::Database(QString path): QObject() {
 /* Opens a connection with the database. */
 bool Database::openConnection() {
     if(!this->mydb.open()) {
-        qDebug() << ("Error opening database.");
         return false;
     }
-    qDebug() << ("Connected to database.");
     /* Check if database is empty */
     QSqlQuery query;
     query.exec("CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, data TEXT)");

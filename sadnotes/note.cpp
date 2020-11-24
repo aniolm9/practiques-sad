@@ -18,7 +18,6 @@
 #include "note.h"
 #include "ui_note.h"
 #include <QMessageBox>
-#include <QDebug>
 
 /* Class constructor. */
 Note::Note(QWidget *parent, int id, QString name, QString data): QMainWindow(parent), ui(new Ui::Note) {

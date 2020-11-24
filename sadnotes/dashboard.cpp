@@ -42,7 +42,6 @@ void Dashboard::on_newNote_clicked() {
 
 /* Remove the selected note from the database. */
 void Dashboard::on_remove_clicked() {
-    qDebug() << this->lastFocused;
     /* If the last focus before clicking to remove was a note, we remove it */
     if (dynamic_cast<QTextEdit*>(this->lastFocused)) {
         QMutableVectorIterator<SmallNote*> it(this->notes);
@@ -61,10 +60,8 @@ void Dashboard::on_remove_clicked() {
 
 /* Allows saving the notes without having to open them in a new window. */
 void Dashboard::on_saveAll_clicked() {
-    qDebug() << "Saving";
     for (auto curNote: this->notes) {
         if (curNote->getStatus()) {
-            qDebug() << "Saving" << curNote;
             this->database->updateNote(curNote->getId(), curNote->getName(), curNote->getData());
             /* Here I prefer a direct method call than a signal/slot.
              * It is faster and cleaner.
@@ -72,7 +69,6 @@ void Dashboard::on_saveAll_clicked() {
             curNote->setStatus(false);
         }
     }
-    qDebug() << "Saved";
 }
 
 /* Opens a note in a new window. */
@@ -94,7 +90,6 @@ void Dashboard::on_open_clicked() {
  * Otherwise, updated the existing one.
  */
 int Dashboard::saveNote(int id, QString name, QString data) {
-    qDebug() << "Save note";
     int status;
     // New note => Insert.
     if (id == constants::NEW_ID) {
@@ -128,7 +123,6 @@ void Dashboard::recoverFocus() {
 
 /* Update notes list. */
 void Dashboard::updateView() {
-    qDebug() << "Updating view";
     QSqlQuery query;
     if (query.exec("SELECT * FROM notes ORDER BY id DESC")) {
         /* Clean current layout to avoid memory leaks */

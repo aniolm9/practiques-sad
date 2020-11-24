@@ -15,7 +15,6 @@
  */
 
 #include "smallnote.h"
-#include <QDebug>
 #include <QTextBlock>
 
 /* Class constructor. */
