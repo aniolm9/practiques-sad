@@ -33,6 +33,7 @@ class ChatServer(port: Int): Thread() {
         while (serverSocketChannel.isOpen) {
             selector.select()
             it = selector.selectedKeys().iterator()
+            //broadcastUsers()
             while (it.hasNext()) {
                 key = it.next()
                 it.remove()
@@ -68,6 +69,7 @@ class ChatServer(port: Int): Thread() {
         }
     }
 
+
     /* Accept new connections. */
     private fun handleAccept(key: SelectionKey?) {
         try {
@@ -87,7 +89,7 @@ class ChatServer(port: Int): Thread() {
         val channel = key!!.channel() as SocketChannel
         val recvString = StringBuilder()
         var msg = ""
-
+        var usersChanged = false
         // We first read the bytes from the channel.
         buffer.clear()
         var read = 0
@@ -105,12 +107,15 @@ class ChatServer(port: Int): Thread() {
         if (key.attachment().toString().startsWith("/")) {
             val nick = recvString.toString().replace("\n", "")
             if (users.contains(nick) || nick.startsWith("/") || nick == "") {
-                channel.write(ByteBuffer.wrap("Username already in use.".toByteArray()))
+                channel.write(ByteBuffer.wrap("Username already in use. \r".toByteArray()))
             } else {
                 users.add(nick)
-                channel.write(ByteBuffer.wrap("OK".toByteArray()))
+                println("users->"+users.last())
+                channel.write(ByteBuffer.wrap("OK\r".toByteArray()))
                 key.attach(nick)
-                msg = "${key.attachment()} entered the chat."
+                //println("key->"+key.attachment())
+                msg = "${key.attachment()} entered the chat.\r"
+                usersChanged=true
             }
         }
 
@@ -119,11 +124,33 @@ class ChatServer(port: Int): Thread() {
             msg = "${key.attachment()} left the chat."
             users.remove(key.attachment().toString())
             channel.close()
+            usersChanged=true
         } else if (msg == "") {
-            msg = "[${key.attachment()}] $recvString"
+            msg = "${key.attachment()}:" + recvString
         }
+        //msg= "Server:"+msg
+        msg.replace("\r","") //añadido
         broadcast(msg, key)
         println(msg)
+        if(usersChanged) {
+            broadcastUsers(this.users, key) //añadido por mi
+        }
+    }
+    private fun broadcastUsers(userlist: ArrayList<String>, sender: SelectionKey) {
+        val msg = "Userlist," + userlist.joinToString(separator = ",")
+        val msgBuf = ByteBuffer.wrap(msg.toByteArray())
+        try {
+            for (key in selector.keys()) {
+                if (key!!.isValid && key.channel() is SocketChannel) {
+                    val channel = key.channel() as SocketChannel
+                    channel.write(msgBuf)
+                    msgBuf.rewind()
+                }
+            }
+        }
+        catch (e: IOException) {
+            println("Failed to send message.")
+        }
     }
 }
 
