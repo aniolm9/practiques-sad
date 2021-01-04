@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Vector;
 
 public class ChatClient extends JFrame implements ActionListener {
@@ -77,6 +78,7 @@ public class ChatClient extends JFrame implements ActionListener {
         this.setSize(300, 200);
         this.setVisible(true);
         jta.setText("Introduce Nickname: ");
+        jta.setEditable(false);
     }
 
     private void runClient() {
@@ -95,24 +97,32 @@ public class ChatClient extends JFrame implements ActionListener {
             pw = new PrintWriter(s.getOutputStream(), true);
 
             String info = "";
+            String msg;
             while (true) {
                 info = in.readLine();
                 System.out.print(info);
                 //Display connected users
                 //displayConnectedUsers(in, userList, info);
-
+                if(info.contains("####") ){
+                    if(info.split("####").length>1){
+                        userList.clear();
+                        Collections.addAll(userList, info.split("####")[0].split(","));
+                        jlu.setListData(userList);
+                    }
+                    msg=info.split("####")[info.split("####").length-1];
+                } else { msg = info;}
                 //process messages sent by other users or server
                 String str = null;
-                if(info.startsWith("/")){
+                if(msg.startsWith("/")){
 
-                } else if(info.equals("OK")){
+                } else if(msg.equals("OK")){
                     jta.setText(jta.getText() + "\n" + "Username Accepted");
                 } else {
                     if (jta.getText() == null || "".equals(jta.getText())) {
-                        str = info;
+                        str = msg;
                     } else {
                         //if (!info.split(":")[0].equals("Server"))
-                        str = jta.getText() + "\r\n" + info;
+                        str = jta.getText() + "\r\n" + msg;
                     }
                     jta.setText(str);
                     jta.setCaretPosition(jta.getDocument().getLength());

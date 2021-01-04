@@ -126,6 +126,8 @@ class ChatServer(port: Int): Thread() {
         } else if (msg == "") {
             msg = "${key.attachment()}: " + recvString
         }
+        var usernames = "Connected users:," + users.joinToString(",") + " ####" ;
+        msg = usernames + msg
         broadcast(msg, key) // Broadcast here users and message
         println(msg)
         /*if(usersChanged) {
