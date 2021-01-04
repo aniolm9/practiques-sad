@@ -16,29 +16,29 @@ public class ChatClient extends JFrame implements ActionListener {
     String host;
     int portNum;
     String nickName;
-    JList<String> jlu = null;
-    JTextArea jta = null;
-    JTextField jtf = null;
-    JButton jb = null;
-    JPanel jp1 = null;
-    JScrollPane jsp2 = null;
-    JScrollPane jsp = null;
+    Vector<String> userList;
+    JList<String> jlu;
+    JTextArea jta;
+    JTextField jtf;
+    JButton jb;
+    JPanel jp1;
+    JScrollPane jsp2;
+    JScrollPane jsp;
     PrintWriter pw = null;
 
-    public static void main(String[] args) {
-        new ChatClient();
-    }
 
     public ChatClient() {
-        this.port = "";
-        this.host= "";
+        this.port="";
+        this.host="";
         this.portNum=0;
         this.nickName="";
+        this.userList = new Vector<String>();
         jlu = new JList<String>();
         jta = new JTextArea();//text area
         jsp = new JScrollPane(jta);//scroll panel
-        jsp2 = new JScrollPane(jlu);
+        jsp2 = new JScrollPane(jlu);//users list
         jtf = new JTextField(10);//text box
+
         // Register a carriage return event
         jtf.addKeyListener(new KeyListener() {
             @Override
@@ -62,10 +62,9 @@ public class ChatClient extends JFrame implements ActionListener {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                onOK();
+                System.exit(0);
             }
         });
-
 
         jb = new JButton("send");
         jb.addActionListener(this);// Register a listener event
@@ -75,10 +74,13 @@ public class ChatClient extends JFrame implements ActionListener {
         this.add(jsp2, BorderLayout.WEST);
         this.add(jsp, BorderLayout.CENTER);
         this.add(jp1, BorderLayout.SOUTH);
-        this.setTitle("chat client");
+        this.setTitle("Chat Client");
         this.setSize(300, 200);
         this.setVisible(true);
+        jta.setText("Introduce Nickname: ");
+    }
 
+    private void runClient() {
         try {
             // Ask for port and host and validate
             this.host = JOptionPane.showInputDialog("Introduce host");
@@ -105,35 +107,11 @@ public class ChatClient extends JFrame implements ActionListener {
             pw = new PrintWriter(s.getOutputStream(), true);
 
 
-            String[] serverMsgs = {};
-            Vector<String> userList = new Vector<String>();
             String info = "";
-            String code = null;
-
-            jta.setText("Introduce Nickname: ");
-
-            //process messages
             while (true) {
                 info = in.readLine();
                 //Display connected users
-                try{
-                   code = info.split(",")[0];
-                    if(code.contains("Userlist")){
-                        userList.clear();
-                        userList.addAll(Arrays.asList(info.split(",")));
-                        String user = in.readLine();
-                        while(user.contains(",")){
-                            userList.add(user.split(",")[user.split(",").length-1]);
-                            user=in.readLine();
-                        }
-                        info=user;
-                        userList.set(0,"Connected Users:");
-                        jlu.setListData(userList);
-                        //jlu.updateUI();
-                    }
-                } catch(ArrayIndexOutOfBoundsException exception){
-                    exception.printStackTrace();
-                }
+                info = displayConnectedUsers(in, userList, info);
 
                 //process messages sent by other users or server
                 String str = null;
@@ -153,29 +131,23 @@ public class ChatClient extends JFrame implements ActionListener {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(jp1,"No connection to server");
+            System.exit(1);
         }
-
     }
-    // give the information to the server
+
+    // Give the information to the server
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jb) {
             sendMessage();
         }
     }
-    private void onOK(){
-        // add your code here
-        System.exit(0);
-    }
-    /**
-     * @Description: Send a message to the server
-     * @throws
-     */
+
+
+    // Send message to server
     public void sendMessage() {
         String info = jtf.getText();
-        String infoAndNick =this.nickName +": "+ info;
-        //pw.println(infoAndNick);
         pw.println(info);
         pw.flush();
         jtf.setText("");
@@ -186,11 +158,36 @@ public class ChatClient extends JFrame implements ActionListener {
         }
         jta.setCaretPosition(jta.getDocument().getLength()); // Set scroll bar auto scrolling
     }
-    public void sendNick(String username){
-        pw.println(username);
-        pw.flush();
-    }
-    public void displayUsers(){
 
+    /* When receiving a Userlist from broadcastUsers,
+     puts the users in the client list and displays it in Jlist jlu.
+     Then returns the last received message which is not a user,
+     so the run method is able to process it
+    */
+    private String displayConnectedUsers(BufferedReader in, Vector<String> userList, String info) throws IOException {
+        String code;
+        try{
+            code = info.split(",")[0];
+            if(code.contains("Userlist")){
+                userList.clear();
+                userList.addAll(Arrays.asList(info.split(",")));
+                String user = in.readLine();
+                while(user.contains(",")){
+                    userList.add(user.split(",")[user.split(",").length-1]);
+                    user= in.readLine();
+                }
+                info =user;
+                userList.set(0,"Connected Users:");
+                jlu.setListData(userList);
+            }
+        } catch(ArrayIndexOutOfBoundsException exception){
+            exception.printStackTrace();
+        }
+        return info;
+    }
+
+    public static void main(String[] args) {
+        ChatClient client = new ChatClient();
+        client.runClient();
     }
 }
