@@ -110,33 +110,29 @@ class ChatServer(port: Int): Thread() {
                 channel.write(ByteBuffer.wrap("Username already in use. \r".toByteArray()))
             } else {
                 users.add(nick)
-                println("users->"+users.last())
                 channel.write(ByteBuffer.wrap("OK\r".toByteArray()))
                 key.attach(nick)
-                //println("key->"+key.attachment())
                 msg = "${key.attachment()} entered the chat.\r"
-                usersChanged=true
+                usersChanged = true
             }
         }
 
         // If the connection is not new, we update the message to display.
         if (read < 0) {
-            msg = "${key.attachment()} left the chat."
+            msg = "${key.attachment()} left the chat.\r"
             users.remove(key.attachment().toString())
             channel.close()
-            usersChanged=true
+            usersChanged = true
         } else if (msg == "") {
-            msg = "${key.attachment()}:" + recvString
+            msg = "${key.attachment()}: " + recvString
         }
-        //msg= "Server:"+msg
-        msg.replace("\r","") //añadido
-        broadcast(msg, key)
+        broadcast(msg, key) // Broadcast here users and message
         println(msg)
-        if(usersChanged) {
-            broadcastUsers(this.users, key) //añadido por mi
-        }
+        /*if(usersChanged) {
+            broadcastUsers(this.users, key) // Hugo: send connected users list.
+        }*/
     }
-    private fun broadcastUsers(userlist: ArrayList<String>, sender: SelectionKey) {
+    /*private fun broadcastUsers(userlist: ArrayList<String>, sender: SelectionKey) {
         val msg = "Userlist," + userlist.joinToString(separator = ",")
         val msgBuf = ByteBuffer.wrap(msg.toByteArray())
         try {
@@ -151,7 +147,7 @@ class ChatServer(port: Int): Thread() {
         catch (e: IOException) {
             println("Failed to send message.")
         }
-    }
+    }*/
 }
 
 /* Main function to run the server. It takes a parameter "port". */

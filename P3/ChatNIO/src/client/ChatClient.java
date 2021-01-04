@@ -26,7 +26,6 @@ public class ChatClient extends JFrame implements ActionListener {
     JScrollPane jsp;
     PrintWriter pw = null;
 
-
     public ChatClient() {
         this.port="";
         this.host="";
@@ -84,34 +83,23 @@ public class ChatClient extends JFrame implements ActionListener {
         try {
             // Ask for port and host and validate
             this.host = JOptionPane.showInputDialog("Introduce host");
-            while (!host.equals("127.0.0.1")){
-                host = JOptionPane.showInputDialog("Wrong Host. Introduce host again");
+            port = JOptionPane.showInputDialog("Introduce port");
+            try {
+                portNum = Integer.parseInt(port);
+            } catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(jp1,"Port must be a 4 digit number");
             }
 
-            do{
-                port = JOptionPane.showInputDialog("Introduce port");
-                try {
-                    portNum = Integer.parseInt(port);
-                } catch(NumberFormatException e){
-                    JOptionPane.showMessageDialog(jp1,"Port must be a 4 digit number");
-                }
-                if (portNum!=8800){
-                    JOptionPane.showMessageDialog(jp1,"Wrong Port");
-                }
-            } while (portNum!=8800);
-
-
             Socket s = new Socket(host, portNum);
-            BufferedReader in = new BufferedReader(new InputStreamReader(s
-                    .getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             pw = new PrintWriter(s.getOutputStream(), true);
-
 
             String info = "";
             while (true) {
                 info = in.readLine();
+                System.out.print(info);
                 //Display connected users
-                info = displayConnectedUsers(in, userList, info);
+                //displayConnectedUsers(in, userList, info);
 
                 //process messages sent by other users or server
                 String str = null;
@@ -144,7 +132,6 @@ public class ChatClient extends JFrame implements ActionListener {
         }
     }
 
-
     // Send message to server
     public void sendMessage() {
         String info = jtf.getText();
@@ -164,9 +151,9 @@ public class ChatClient extends JFrame implements ActionListener {
      Then returns the last received message which is not a user,
      so the run method is able to process it
     */
-    private String displayConnectedUsers(BufferedReader in, Vector<String> userList, String info) throws IOException {
+    /*private void displayConnectedUsers(BufferedReader in, Vector<String> userList, String info) throws IOException {
         String code;
-        try{
+        try {
             code = info.split(",")[0];
             if(code.contains("Userlist")){
                 userList.clear();
@@ -183,8 +170,8 @@ public class ChatClient extends JFrame implements ActionListener {
         } catch(ArrayIndexOutOfBoundsException exception){
             exception.printStackTrace();
         }
-        return info;
-    }
+        //return info;
+    }*/
 
     public static void main(String[] args) {
         ChatClient client = new ChatClient();
