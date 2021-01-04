@@ -33,7 +33,6 @@ class ChatServer(port: Int): Thread() {
         while (serverSocketChannel.isOpen) {
             selector.select()
             it = selector.selectedKeys().iterator()
-            //broadcastUsers()
             while (it.hasNext()) {
                 key = it.next()
                 it.remove()
@@ -69,7 +68,6 @@ class ChatServer(port: Int): Thread() {
         }
     }
 
-
     /* Accept new connections. */
     private fun handleAccept(key: SelectionKey?) {
         try {
@@ -89,7 +87,6 @@ class ChatServer(port: Int): Thread() {
         val channel = key!!.channel() as SocketChannel
         val recvString = StringBuilder()
         var msg = ""
-        var usersChanged = false
         // We first read the bytes from the channel.
         buffer.clear()
         var read = 0
@@ -113,7 +110,6 @@ class ChatServer(port: Int): Thread() {
                 channel.write(ByteBuffer.wrap("OK\r".toByteArray()))
                 key.attach(nick)
                 msg = "${key.attachment()} entered the chat.\r"
-                usersChanged = true
             }
         }
 
@@ -122,34 +118,13 @@ class ChatServer(port: Int): Thread() {
             msg = "${key.attachment()} left the chat.\r"
             users.remove(key.attachment().toString())
             channel.close()
-            usersChanged = true
         } else if (msg == "") {
             msg = "${key.attachment()}: " + recvString
         }
-        var usernames = "Connected users:," + users.joinToString(",") + " ####" ;
+        val usernames = "Connected users:," + users.joinToString(",") + " ####" ;
         msg = usernames + msg
         broadcast(msg, key) // Broadcast here users and message
-        println(msg)
-        /*if(usersChanged) {
-            broadcastUsers(this.users, key) // Hugo: send connected users list.
-        }*/
     }
-    /*private fun broadcastUsers(userlist: ArrayList<String>, sender: SelectionKey) {
-        val msg = "Userlist," + userlist.joinToString(separator = ",")
-        val msgBuf = ByteBuffer.wrap(msg.toByteArray())
-        try {
-            for (key in selector.keys()) {
-                if (key!!.isValid && key.channel() is SocketChannel) {
-                    val channel = key.channel() as SocketChannel
-                    channel.write(msgBuf)
-                    msgBuf.rewind()
-                }
-            }
-        }
-        catch (e: IOException) {
-            println("Failed to send message.")
-        }
-    }*/
 }
 
 /* Main function to run the server. It takes a parameter "port". */
